@@ -92,8 +92,12 @@
           </div>
           <label>
             Logo o imagen de marca
-            <input class="file-input" name="logo" type="file" accept="image/*">
-            <span class="field-help">Acepta PNG, JPG o JPEG. Recomendado: PNG transparente cuadrado, ideal 800 x 800 px, minimo 500 x 500 px. El logo se imprime dentro de 3 cm x 3 cm.</span>
+            <span class="file-picker">
+              <input class="file-input" name="logo" type="file" accept="image/*">
+              <span class="file-button">Seleccionar imagen</span>
+              <span class="file-name" id="logoFileName">Sin imagen seleccionada</span>
+            </span>
+            <span class="field-help">Acepta PNG, JPG o JPEG. Recomendado: PNG transparente, ideal 800 x 800 px o mas. Si la imagen es chica o no es cuadrada, se puede ajustar con zoom y recorte.</span>
             <span class="field-error" id="logoError" aria-live="polite"></span>
           </label>
 
@@ -239,6 +243,29 @@
         </div>
       </section>
     </main>
+
+    <div class="crop-modal" id="cropModal" aria-hidden="true">
+      <div class="crop-dialog" role="dialog" aria-modal="true" aria-labelledby="cropTitle">
+        <div class="crop-head">
+          <div>
+            <strong id="cropTitle">Ajustar logo</strong>
+            <span>Mover y acercar para encuadrar en formato cuadrado.</span>
+          </div>
+          <button type="button" id="cropCancelBtn" aria-label="Cancelar ajuste">x</button>
+        </div>
+        <div class="crop-stage" id="cropStage">
+          <canvas id="cropCanvas" width="360" height="360"></canvas>
+        </div>
+        <label class="crop-zoom">
+          Zoom
+          <input id="cropZoom" type="range" min="1" max="3" step="0.01" value="1">
+        </label>
+        <div class="crop-actions">
+          <button type="button" id="cropCancelBtn2">Cancelar</button>
+          <button class="primary" type="button" id="cropApplyBtn">Usar logo</button>
+        </div>
+      </div>
+    </div>
 
     <script src="script.js"></script>
   </body>

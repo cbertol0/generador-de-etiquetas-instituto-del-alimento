@@ -84,11 +84,31 @@ const octagonStrip = document.querySelector("[data-octagons]");
 const stage = document.querySelector("#labelsStage");
 const logo = document.querySelector("#brandLogo");
 const logoInput = document.querySelector("input[name='logo']");
+const logoFileName = document.querySelector("#logoFileName");
 const logoError = document.querySelector("#logoError");
 const manufacturerForm = document.querySelector("#dorso");
 const dateFields = document.querySelectorAll("[data-date-mask]");
 const printMessage = document.querySelector("#printMessage");
 const vdDashFields = document.querySelectorAll(".vd-field input[type='checkbox']");
+const cropModal = document.querySelector("#cropModal");
+const cropCanvas = document.querySelector("#cropCanvas");
+const cropStage = document.querySelector("#cropStage");
+const cropZoom = document.querySelector("#cropZoom");
+const cropApplyBtn = document.querySelector("#cropApplyBtn");
+const cropCancelBtns = document.querySelectorAll("#cropCancelBtn, #cropCancelBtn2");
+const cropContext = cropCanvas.getContext("2d");
+const cropState = {
+  image: null,
+  scale: 1,
+  minScale: 1,
+  x: 0,
+  y: 0,
+  dragging: false,
+  startX: 0,
+  startY: 0,
+  startImageX: 0,
+  startImageY: 0
+};
 
 function displayNumber(value) {
   return String(value || "").replace(".", ",");
@@ -277,6 +297,61 @@ function showManufacturerValidation() {
   return true;
 }
 
+function drawCropCanvas() {
+  if (!cropState.image) return;
+  const size = cropCanvas.width;
+  const drawWidth = cropState.image.naturalWidth * cropState.scale;
+  const drawHeight = cropState.image.naturalHeight * cropState.scale;
+  if (drawWidth <= size) {
+    cropState.x = (size - drawWidth) / 2;
+  } else {
+    cropState.x = Math.min(0, Math.max(size - drawWidth, cropState.x));
+  }
+  if (drawHeight <= size) {
+    cropState.y = (size - drawHeight) / 2;
+  } else {
+    cropState.y = Math.min(0, Math.max(size - drawHeight, cropState.y));
+  }
+  cropContext.clearRect(0, 0, size, size);
+  cropContext.fillStyle = "#f4f6f6";
+  cropContext.fillRect(0, 0, size, size);
+  cropContext.drawImage(cropState.image, cropState.x, cropState.y, drawWidth, drawHeight);
+}
+
+function openCropper(image) {
+  const size = cropCanvas.width;
+  const shortestSide = Math.min(image.naturalWidth, image.naturalHeight);
+  if (shortestSide < 500) {
+    logoError.textContent = "La imagen es menor a 500 px en uno de sus lados. Se puede usar igual, pero podria verse con menos calidad al imprimir.";
+  } else {
+    logoError.textContent = "";
+  }
+  cropState.image = image;
+  cropState.minScale = Math.min(size / image.naturalWidth, size / image.naturalHeight);
+  cropState.scale = cropState.minScale;
+  cropState.x = (size - image.naturalWidth * cropState.scale) / 2;
+  cropState.y = (size - image.naturalHeight * cropState.scale) / 2;
+  cropZoom.min = cropState.minScale.toFixed(3);
+  cropZoom.max = (cropState.minScale * 3).toFixed(3);
+  cropZoom.value = cropState.scale;
+  cropModal.classList.add("is-open");
+  cropModal.setAttribute("aria-hidden", "false");
+  drawCropCanvas();
+}
+
+function closeCropper() {
+  cropModal.classList.remove("is-open");
+  cropModal.setAttribute("aria-hidden", "true");
+  cropState.image = null;
+  logoInput.value = "";
+}
+
+function applyCrop() {
+  logo.src = cropCanvas.toDataURL("image/png");
+  logoFileName.textContent = "Logo cargado y ajustado";
+  closeCropper();
+}
+
 dateFields.forEach((field) => {
   field.addEventListener("input", () => {
     validateDateField(field);
@@ -288,25 +363,58 @@ dateFields.forEach((field) => {
 logoInput.addEventListener("change", (event) => {
   const file = event.target.files[0];
   if (!file) return;
+  if (!file.type.startsWith("image/")) {
+    logoError.textContent = "El archivo debe ser una imagen PNG, JPG o JPEG.";
+    logoInput.value = "";
+    return;
+  }
   const reader = new FileReader();
   reader.addEventListener("load", () => {
     const preview = new Image();
     preview.addEventListener("load", () => {
-      const smallestSide = Math.min(preview.naturalWidth, preview.naturalHeight);
-      const largestSide = Math.max(preview.naturalWidth, preview.naturalHeight);
-      const ratio = largestSide / smallestSide;
-      if (smallestSide < 500 || ratio > 1.2) {
-        logoError.textContent = "El logo puede ser PNG, JPG o JPEG, pero debe ser cuadrado o casi cuadrado y medir al menos 500 x 500 px. Ideal: PNG transparente de 800 x 800 px.";
-        logoInput.value = "";
-        return;
-      }
-      logoError.textContent = "";
-      logo.src = reader.result;
+      openCropper(preview);
     });
     preview.src = reader.result;
   });
   reader.readAsDataURL(file);
 });
+
+cropZoom.addEventListener("input", () => {
+  if (!cropState.image) return;
+  const size = cropCanvas.width;
+  const oldScale = cropState.scale;
+  const newScale = Number(cropZoom.value);
+  const centerX = size / 2;
+  const centerY = size / 2;
+  cropState.x = centerX - ((centerX - cropState.x) / oldScale) * newScale;
+  cropState.y = centerY - ((centerY - cropState.y) / oldScale) * newScale;
+  cropState.scale = newScale;
+  drawCropCanvas();
+});
+
+cropStage.addEventListener("pointerdown", (event) => {
+  if (!cropState.image) return;
+  cropState.dragging = true;
+  cropState.startX = event.clientX;
+  cropState.startY = event.clientY;
+  cropState.startImageX = cropState.x;
+  cropState.startImageY = cropState.y;
+  cropStage.setPointerCapture(event.pointerId);
+});
+
+cropStage.addEventListener("pointermove", (event) => {
+  if (!cropState.dragging) return;
+  cropState.x = cropState.startImageX + event.clientX - cropState.startX;
+  cropState.y = cropState.startImageY + event.clientY - cropState.startY;
+  drawCropCanvas();
+});
+
+cropStage.addEventListener("pointerup", () => {
+  cropState.dragging = false;
+});
+
+cropApplyBtn.addEventListener("click", applyCrop);
+cropCancelBtns.forEach((button) => button.addEventListener("click", closeCropper));
 
 document.querySelector("#printBtn").addEventListener("click", () => {
   if (!showManufacturerValidation()) return;
@@ -320,6 +428,7 @@ document.querySelector("#resetBtn").addEventListener("click", () => {
   writeState(defaults);
   logo.src = "assets/foto-de-producto.webp";
   logoInput.value = "";
+  logoFileName.textContent = "Sin imagen seleccionada";
   logoError.textContent = "";
   dateFields.forEach(validateDateField);
   render();
