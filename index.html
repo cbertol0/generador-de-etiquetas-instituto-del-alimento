@@ -1,0 +1,245 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Generador de etiquetas alimentarias</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+  </head>
+  <body>
+    <main class="app">
+      <section class="editor" aria-label="Editor de etiquetas">
+        <header class="site-header">
+          <strong>Instituto del Alimento</strong>
+          <span>Generador de etiquetas</span>
+        </header>
+        <div class="brand-row">
+          <div>
+            <h1>Etiquetas</h1>
+            <p>Frente y dorso - 10 cm x 10 cm</p>
+          </div>
+          <div class="print-actions">
+            <button class="primary" id="printBtn" type="button">Imprimir vista</button>
+            <span class="print-help">Si el navegador bloquea el dialogo, usar Ctrl+P.</span>
+            <span class="print-message" id="printMessage" aria-live="polite"></span>
+          </div>
+        </div>
+
+        <div class="tabs" role="tablist" aria-label="Secciones">
+          <button class="tab is-active" type="button" data-panel="frontal">Etiqueta frontal</button>
+          <button class="tab" type="button" data-panel="dorso">Etiqueta dorso</button>
+        </div>
+
+        <form class="panel is-active" id="frontal" autocomplete="off">
+          <fieldset class="form-group">
+            <legend>Octogonos frontales</legend>
+            <label class="check"><input type="checkbox" name="excesoAzucares" checked> Exceso en azucares</label>
+            <label class="check"><input type="checkbox" name="excesoGrasasTotales" checked> Exceso en grasas totales</label>
+            <label class="check"><input type="checkbox" name="excesoGrasasSaturadas" checked> Exceso en grasas saturadas</label>
+            <label class="check"><input type="checkbox" name="excesoCalorias" checked> Exceso en calorias</label>
+            <label class="check"><input type="checkbox" name="excesoSodio"> Exceso en sodio</label>
+          </fieldset>
+
+          <label>
+            Marca
+            <input name="marca" value="ALGO DULCE">
+          </label>
+          <label>
+            Rubro
+            <input name="rubro" value="REPOSTERIA">
+          </label>
+          <label>
+            Producto
+            <textarea name="producto" rows="4">Alfajor relleno de dulce de leche con bano de producto de reposteria semiamargo</textarea>
+          </label>
+          <div class="field-grid">
+            <label>
+              Peso neto
+              <span class="unit-field">
+                <input name="pesoValor" type="number" min="0.01" step="0.01" value="120" required>
+                <select name="pesoUnidad" required>
+                  <option value="g" selected>g</option>
+                  <option value="kg">kg</option>
+                  <option value="ml">ml</option>
+                  <option value="l">l</option>
+                </select>
+              </span>
+            </label>
+            <label>
+              Tenor graso
+              <span class="suffix-field">
+                <input name="tenorValor" type="number" min="0" max="100" step="0.01" value="23" required>
+                <span>%</span>
+              </span>
+            </label>
+          </div>
+          <label>
+            Industria
+            <input name="industria" value="INDUSTRIA ARGENTINA">
+          </label>
+          <div class="field-grid">
+            <label>
+              Instagram
+              <input name="instagram" value="@algodulce.2431">
+            </label>
+            <label>
+              Facebook
+              <input name="facebook" value="">
+            </label>
+          </div>
+          <label>
+            Logo o imagen de marca
+            <input class="file-input" name="logo" type="file" accept="image/*">
+            <span class="field-help">Acepta PNG, JPG o JPEG. Recomendado: PNG transparente cuadrado, ideal 800 x 800 px, minimo 500 x 500 px. El logo se imprime dentro de 3 cm x 3 cm.</span>
+            <span class="field-error" id="logoError" aria-live="polite"></span>
+          </label>
+
+          <div class="actions">
+            <button type="button" id="resetBtn">Restaurar ejemplo</button>
+          </div>
+        </form>
+
+        <form class="panel" id="dorso" autocomplete="off">
+          <fieldset class="form-group">
+            <legend>Informacion nutricional</legend>
+            <label>
+              Ingredientes
+              <textarea name="ingredientes" rows="5">Harina de trigo 0000 enriquecida segun Ley 25630 (hierro: 30 mg/kg, acido folico: 2.2 mg/kg, tiamina (B1): 6.3 mg/kg, riboflavina (B2): 1.3 mg/kg, niacina: 13 mg/kg), manteca, azucar rubio, avena, huevo, azucar, almidon de maiz, bicarbonato de sodio, sal, canela molida. CONTIENE AVENA, HUEVO, SULFITOS Y DERIVADOS DE TRIGO Y LECHE.</textarea>
+            </label>
+            <div class="field-grid">
+              <label>
+                Porcion
+                <input name="porcion" value="50 g (1 unidad)">
+              </label>
+              <label>
+                Porciones
+                <input name="porciones" value="1">
+              </label>
+            </div>
+            <div class="nutrition-fields">
+              <label>Valor energetico <span class="energy-field"><input name="energiaKcal" type="number" min="0" step="0.01" value="233" required><span>kcal =</span><input name="energiaKj" type="number" min="0" step="0.01" value="976" required><span>kJ</span></span><span class="vd-field"><input name="energiaVdValor" type="number" min="0" max="999" step="0.01" value="12"><span class="dash-vd"><input type="checkbox" name="energiaVdDash"> -</span></span></label>
+              <label>Carbohidratos <span class="suffix-field"><input name="carbohidratosValor" type="number" min="0" step="0.01" value="31" required><span>g</span></span><span class="vd-field"><input name="carbohidratosVdValor" type="number" min="0" max="999" step="0.01" value="10"><span class="dash-vd"><input type="checkbox" name="carbohidratosVdDash"> -</span></span></label>
+              <label>Azucares Totales <span class="suffix-field"><input name="azucaresValor" type="number" min="0" step="0.01" value="15" required><span>g</span></span><span class="vd-field"><input name="azucaresVdValor" type="number" min="0" max="999" step="0.01"><span class="dash-vd"><input type="checkbox" name="azucaresVdDash" checked> -</span></span></label>
+              <label>Azucares Anadidos <span class="suffix-field"><input name="azucaresAnadidosValor" type="number" min="0" step="0.01" value="15" required><span>g</span></span><span class="vd-field"><input name="azucaresAnadidosVdValor" type="number" min="0" max="999" step="0.01"><span class="dash-vd"><input type="checkbox" name="azucaresAnadidosVdDash" checked> -</span></span></label>
+              <label>Proteinas <span class="suffix-field"><input name="proteinasValor" type="number" min="0" step="0.01" value="3.7" required><span>g</span></span><span class="vd-field"><input name="proteinasVdValor" type="number" min="0" max="999" step="0.01" value="5"><span class="dash-vd"><input type="checkbox" name="proteinasVdDash"> -</span></span></label>
+              <label>Grasas Totales <span class="suffix-field"><input name="grasasTotalesValor" type="number" min="0" step="0.01" value="10" required><span>g</span></span><span class="vd-field"><input name="grasasTotalesVdValor" type="number" min="0" max="999" step="0.01" value="19"><span class="dash-vd"><input type="checkbox" name="grasasTotalesVdDash"> -</span></span></label>
+              <label>Grasas Saturadas <span class="suffix-field"><input name="grasasSaturadasValor" type="number" min="0" step="0.01" value="5.4" required><span>g</span></span><span class="vd-field"><input name="grasasSaturadasVdValor" type="number" min="0" max="999" step="0.01" value="25"><span class="dash-vd"><input type="checkbox" name="grasasSaturadasVdDash"> -</span></span></label>
+              <label>Grasas Trans <span class="suffix-field"><input name="grasasTransValor" type="number" min="0" step="0.01" value="0" required><span>g</span></span><span class="vd-field"><input name="grasasTransVdValor" type="number" min="0" max="999" step="0.01"><span class="dash-vd"><input type="checkbox" name="grasasTransVdDash" checked> -</span></span></label>
+              <label>Fibra Alimentaria <span class="suffix-field"><input name="fibraValor" type="number" min="0" step="0.01" value="0.5" required><span>g</span></span><span class="vd-field"><input name="fibraVdValor" type="number" min="0" max="999" step="0.01" value="2"><span class="dash-vd"><input type="checkbox" name="fibraVdDash"> -</span></span></label>
+              <label>Sodio <span class="suffix-field"><input name="sodioValor" type="number" min="0" step="0.01" value="120" required><span>mg</span></span><span class="vd-field"><input name="sodioVdValor" type="number" min="0" max="999" step="0.01" value="5"><span class="dash-vd"><input type="checkbox" name="sodioVdDash"> -</span></span></label>
+            </div>
+          </fieldset>
+
+          <fieldset class="form-group">
+            <legend>Datos del fabricante</legend>
+            <label>
+              Elaborado y envasado por
+              <input name="elaboradoPor" value="Jaquelina Pecora - Jorgito" required>
+            </label>
+            <label>
+              Domicilio
+              <input name="domicilio" value="1912 - Rosario - Sta Fe" required>
+            </label>
+            <label>
+              No de GIP / Registro
+              <input name="gip" value="1497/2025" required>
+            </label>
+            <label>
+              Conservacion
+              <textarea name="conservacion" rows="2" required>Conservar en lugar fresco y seco</textarea>
+            </label>
+            <div class="field-grid">
+              <label>
+                Fecha de elaboracion
+                <input name="fechaElaboracion" inputmode="numeric" maxlength="10" placeholder="dd/mm/aaaa" data-date-mask required>
+              </label>
+              <label>
+                Fecha de vencimiento
+                <input name="fechaVencimiento" inputmode="numeric" maxlength="10" placeholder="dd/mm/aaaa" data-date-mask required>
+              </label>
+            </div>
+            <label>
+              Leyenda comercial
+              <input name="venta" value="VENTA EXCLUSIVA EN ROSARIO" required>
+            </label>
+            <button type="button" id="validateManufacturerBtn">Validar dorso</button>
+          </fieldset>
+        </form>
+      </section>
+
+      <section class="preview" aria-label="Vista previa">
+        <div class="preview-toolbar">
+          <button class="view-toggle is-active" type="button" data-view="front">Frente</button>
+          <button class="view-toggle" type="button" data-view="back">Dorso</button>
+          <button class="view-toggle" type="button" data-view="both">Ambas</button>
+        </div>
+        <div class="labels-stage" id="labelsStage">
+          <article class="label label-front" data-label="front">
+            <div class="octagon-strip" data-octagons></div>
+            <div class="front-body">
+              <div class="logo-block">
+                <img id="brandLogo" src="assets/foto-de-producto.webp" alt="">
+                <strong data-bind="marca"></strong>
+                <span data-bind="rubro"></span>
+              </div>
+              <div class="product-copy">
+                <h2 data-bind="producto"></h2>
+                <p>Tenor graso <span data-bind="tenor"></span></p>
+                <p>Peso neto: <span data-bind="peso"></span></p>
+                <p data-bind="industria"></p>
+                <p class="social-line" data-optional="instagram">
+                  <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M7.8 2h8.4A5.8 5.8 0 0 1 22 7.8v8.4a5.8 5.8 0 0 1-5.8 5.8H7.8A5.8 5.8 0 0 1 2 16.2V7.8A5.8 5.8 0 0 1 7.8 2Zm0 2A3.8 3.8 0 0 0 4 7.8v8.4A3.8 3.8 0 0 0 7.8 20h8.4a3.8 3.8 0 0 0 3.8-3.8V7.8A3.8 3.8 0 0 0 16.2 4H7.8Zm4.2 3.5A4.5 4.5 0 1 1 7.5 12 4.5 4.5 0 0 1 12 7.5Zm0 2A2.5 2.5 0 1 0 14.5 12 2.5 2.5 0 0 0 12 9.5Zm4.75-2.85a1.05 1.05 0 1 1-1.05 1.05 1.05 1.05 0 0 1 1.05-1.05Z"/></svg>
+                  <span data-bind="instagram"></span>
+                </p>
+                <p class="social-line" data-optional="facebook">
+                  <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M14 8.2V6.8c0-.7.45-.9.95-.9H17V2.2A26 26 0 0 0 14 2c-3 0-5 1.8-5 5.1v1.1H6v4h3V22h4v-9.8h3.1l.6-4H14Z"/></svg>
+                  <span data-bind="facebook"></span>
+                </p>
+              </div>
+            </div>
+          </article>
+
+          <article class="label label-back" data-label="back">
+            <section class="ingredients">
+              <p><strong>Ingredientes:</strong> <span data-bind="ingredientes"></span></p>
+            </section>
+            <div class="back-grid">
+              <section class="nutrition-box">
+                <header>
+                  <strong>INFORMACION NUTRICIONAL</strong>
+                  <span>Porcion: <b data-bind="porcion"></b></span>
+                </header>
+                <table class="nutrition-table">
+                  <thead>
+                    <tr>
+                      <th></th>
+                      <th>Cant. por porcion</th>
+                      <th>% VD *</th>
+                    </tr>
+                  </thead>
+                  <tbody id="nutritionRows"></tbody>
+                </table>
+                <p class="daily-note">(*) % Valores Diarios con base a una dieta de 2.000 kcal u 8.400 kJ. Sus valores diarios pueden ser mayores o menores dependiendo de sus necesidades energeticas.</p>
+              </section>
+              <aside class="maker-data">
+                <p><strong>Elaborado y envasado por:</strong><br><span data-bind="elaboradoPor"></span><br><span data-bind="domicilio"></span></p>
+                <p><strong>No de GIP:</strong> <span data-bind="gip"></span></p>
+                <p data-bind="conservacion"></p>
+                <dl>
+                  <div><dt>Fecha de elaboracion:</dt><dd data-bind="fechaElaboracion"></dd></div>
+                  <div><dt>Fecha de vencimiento:</dt><dd data-bind="fechaVencimiento"></dd></div>
+                </dl>
+                <p class="sale-note" data-bind="venta"></p>
+              </aside>
+            </div>
+          </article>
+        </div>
+      </section>
+    </main>
+
+    <script src="script.js"></script>
+  </body>
+</html>
