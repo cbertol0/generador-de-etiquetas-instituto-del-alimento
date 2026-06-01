@@ -342,6 +342,7 @@ select:user-invalid {
 
 .preview-toolbar {
   width: min(100%, 520px);
+  max-width: 100%;
 }
 
 .labels-stage {
@@ -349,6 +350,7 @@ select:user-invalid {
   align-items: flex-start;
   gap: 24px;
   flex-wrap: wrap;
+  width: min(100%, 520px);
 }
 
 .labels-stage[data-view="front"] .label-back,
@@ -368,6 +370,17 @@ select:user-invalid {
   overflow: hidden;
   print-color-adjust: exact;
   -webkit-print-color-adjust: exact;
+}
+
+@media screen and (min-width: 981px) {
+  .preview .label {
+    width: 10cm;
+    height: 10cm;
+    transform: scale(1.376);
+    transform-origin: top left;
+    margin-right: 142px;
+    margin-bottom: 142px;
+  }
 }
 
 .label-front {
@@ -678,6 +691,8 @@ select:user-invalid {
   }
 
   .label {
+    width: 10cm;
+    height: 10cm;
     transform: none;
     margin: 0;
     border: 1.2pt solid #000;
