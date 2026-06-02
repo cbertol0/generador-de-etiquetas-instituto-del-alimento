@@ -54,7 +54,6 @@ button {
 }
 
 .brand-row,
-.preview-toolbar,
 .actions {
   display: flex;
   align-items: center;
@@ -135,14 +134,7 @@ h1 {
   gap: 6px;
 }
 
-.preview-toolbar {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 6px;
-}
-
 .tab,
-.view-toggle,
 .primary,
 .actions button,
 #validateManufacturerBtn {
@@ -151,8 +143,7 @@ h1 {
   padding: 0 10px;
 }
 
-.tab.is-active,
-.view-toggle.is-active {
+.tab.is-active {
   border-color: var(--accent);
   background: #e6f3f1;
   color: #07585a;
@@ -275,6 +266,10 @@ select:user-invalid {
 
 .field-help {
   color: var(--muted);
+}
+
+.is-hidden {
+  display: none !important;
 }
 
 .field-error {
@@ -473,28 +468,45 @@ select:user-invalid {
   overflow: auto;
 }
 
-.preview-toolbar {
-  width: min(100%, 520px);
-  max-width: 100%;
-}
-
 .labels-stage {
   display: flex;
   align-items: flex-start;
   gap: 24px;
   flex-wrap: wrap;
   width: min(100%, 520px);
+  --label-w: 10cm;
+  --label-h: 10cm;
+  --front-top-space: 1.58cm;
+  --octagon-size: 1.65cm;
+  --octagon-gap: 0;
+  --label-font-factor: 1;
+  --back-font-factor: 1;
 }
 
-.labels-stage[data-view="front"] .label-back,
-.labels-stage[data-view="back"] .label-front {
-  display: none;
+.labels-stage[data-template="frasco"] {
+  --label-w: 6cm;
+  --label-h: 7cm;
+  --front-top-space: 1.22cm;
+  --octagon-size: 1.18cm;
+  --octagon-gap: 0;
+  --label-font-factor: 0.78;
+  --back-font-factor: 0.58;
+}
+
+.labels-stage[data-template="panificacionBudines"] {
+  --label-w: 10cm;
+  --label-h: 5cm;
+  --front-top-space: 1.06cm;
+  --octagon-size: 1.08cm;
+  --octagon-gap: 0;
+  --label-font-factor: 0.72;
+  --back-font-factor: 0.56;
 }
 
 .label {
   position: relative;
-  width: 10cm;
-  height: 10cm;
+  width: var(--label-w);
+  height: var(--label-h);
   flex: 0 0 auto;
   background: #fff;
   color: #111;
@@ -507,24 +519,24 @@ select:user-invalid {
 
 @media screen and (min-width: 981px) {
   .preview .label {
-    width: 10cm;
-    height: 10cm;
+    width: var(--label-w);
+    height: var(--label-h);
     transform: scale(1.376);
     transform-origin: top left;
-    margin-right: 142px;
-    margin-bottom: 142px;
+    margin-right: calc(var(--label-w) * 0.376 + 18px);
+    margin-bottom: calc(var(--label-h) * 0.376 + 18px);
   }
 }
 
 .label-front {
   overflow: visible;
-  padding-top: 1.58cm;
+  padding-top: var(--front-top-space);
 }
 
 .front-body {
   height: 100%;
   display: grid;
-  grid-template-columns: 44% 56%;
+  grid-template-columns: 48% 52%;
   align-items: center;
   padding: 0.48cm;
   gap: 0.22cm;
@@ -542,14 +554,14 @@ select:user-invalid {
 }
 
 .logo-block img {
-  width: 3cm;
-  height: 3cm;
+  width: calc(3.55cm * var(--label-font-factor));
+  height: calc(3.55cm * var(--label-font-factor));
   object-fit: contain;
 }
 
 .logo-block strong {
   max-width: 100%;
-  font-size: 0.58cm;
+  font-size: calc(0.58cm * var(--label-font-factor));
   font-weight: 500;
   letter-spacing: 0;
   line-height: 1;
@@ -557,8 +569,8 @@ select:user-invalid {
 }
 
 .logo-block span {
-  font-size: 0.18cm;
-  letter-spacing: 0.08cm;
+  font-size: calc(0.145cm * var(--label-font-factor));
+  letter-spacing: 0.055cm;
 }
 
 .product-copy {
@@ -574,14 +586,14 @@ select:user-invalid {
 
 .product-copy h2 {
   margin: 0 0 0.12cm;
-  font-size: 0.37cm;
-  line-height: 1.35;
+  font-size: calc(0.32cm * var(--label-font-factor));
+  line-height: 1.28;
   font-weight: 800;
   overflow-wrap: anywhere;
 }
 
 .product-copy p {
-  font-size: 0.18cm;
+  font-size: calc(0.18cm * var(--label-font-factor));
   line-height: 1.15;
   overflow-wrap: anywhere;
 }
@@ -606,22 +618,32 @@ select:user-invalid {
 
 .octagon-strip {
   position: absolute;
-  left: 50%;
-  top: 0.06cm;
+  left: auto;
+  right: 0;
+  top: 0;
   width: max-content;
   max-width: 100%;
   display: flex;
-  gap: 0.06cm;
+  gap: var(--octagon-gap);
+  flex-wrap: wrap;
   align-items: start;
+  justify-content: flex-end;
+  transform: none;
+}
+
+.labels-stage[data-template="frasco"] .octagon-strip {
+  left: 50%;
+  right: auto;
+  top: 3px;
   justify-content: center;
   transform: translateX(-50%);
 }
 
 .octagon-img {
   display: block;
-  width: 1.65cm;
-  height: 1.65cm;
-  flex: 0 0 1.65cm;
+  width: var(--octagon-size);
+  height: var(--octagon-size);
+  flex: 0 0 var(--octagon-size);
   aspect-ratio: 1;
   object-fit: contain;
 }
@@ -631,18 +653,18 @@ select:user-invalid {
   flex-direction: column;
   padding: 0.27cm 0.3cm;
   gap: 0.23cm;
-  font-size: 0.22cm;
+  font-size: calc(0.22cm * var(--back-font-factor));
   line-height: 1.25;
 }
 
 .ingredients p {
-  font-size: 0.22cm;
+  font-size: calc(0.22cm * var(--back-font-factor));
   line-height: 1.32;
   overflow-wrap: anywhere;
 }
 
 .ingredients strong {
-  font-size: 0.24cm;
+  font-size: calc(0.24cm * var(--back-font-factor));
 }
 
 .back-grid {
@@ -662,19 +684,19 @@ select:user-invalid {
   align-items: center;
   border-bottom: 0.03cm solid #111;
   padding: 0.04cm;
-  font-size: 0.22cm;
+  font-size: calc(0.22cm * var(--back-font-factor));
   line-height: 1.1;
   text-align: center;
 }
 
 .nutrition-box header strong {
-  font-size: 0.23cm;
+  font-size: calc(0.23cm * var(--back-font-factor));
 }
 
 .nutrition-table {
   width: 100%;
   border-collapse: collapse;
-  font-size: 0.21cm;
+  font-size: calc(0.21cm * var(--back-font-factor));
   line-height: 1.05;
 }
 
@@ -704,7 +726,7 @@ select:user-invalid {
 
 .daily-note {
   padding: 0.06cm 0.12cm;
-  font-size: 0.19cm;
+  font-size: calc(0.19cm * var(--back-font-factor));
   line-height: 1.16;
   text-align: justify;
 }
@@ -714,7 +736,7 @@ select:user-invalid {
   flex-direction: column;
   gap: 0.18cm;
   padding-top: 0.32cm;
-  font-size: 0.2cm;
+  font-size: calc(0.2cm * var(--back-font-factor));
   line-height: 1.35;
 }
 
@@ -748,6 +770,149 @@ select:user-invalid {
 
 .sale-note {
   margin-top: 0.2cm;
+}
+
+.labels-stage[data-template="frasco"] .front-body {
+  grid-template-columns: 1fr;
+  grid-template-rows: auto 1fr;
+  padding: 0.34cm;
+}
+
+.labels-stage[data-template="frasco"] .logo-block {
+  gap: 0.055cm;
+}
+
+.labels-stage[data-template="frasco"] .logo-block img {
+  width: 2.15cm;
+  height: 2.15cm;
+}
+
+.labels-stage[data-template="frasco"] .logo-block span {
+  font-size: 0.1cm;
+  letter-spacing: 0.04cm;
+}
+
+.labels-stage[data-template="frasco"] .product-copy h2 {
+  font-size: 0.24cm;
+  line-height: 1.22;
+}
+
+.labels-stage[data-template="frasco"] .back-grid {
+  grid-template-columns: 1fr;
+  gap: 0.06cm;
+}
+
+.labels-stage[data-template="frasco"] .label-back {
+  padding: 0.12cm 0.14cm;
+  gap: 0.06cm;
+  line-height: 1.1;
+}
+
+.labels-stage[data-template="frasco"] .ingredients p {
+  line-height: 1.1;
+}
+
+.labels-stage[data-template="frasco"] .nutrition-box header {
+  padding: 0.02cm;
+}
+
+.labels-stage[data-template="frasco"] .nutrition-table {
+  line-height: 1;
+}
+
+.labels-stage[data-template="frasco"] .nutrition-table th,
+.labels-stage[data-template="frasco"] .nutrition-table td {
+  padding: 0.012cm 0.025cm;
+}
+
+.labels-stage[data-template="frasco"] .daily-note {
+  padding: 0.025cm 0.05cm;
+  line-height: 1.05;
+}
+
+.labels-stage[data-template="frasco"] .maker-data {
+  gap: 0.035cm;
+  padding-top: 0;
+  line-height: 1.12;
+}
+
+.labels-stage[data-template="frasco"] .maker-data dl {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.035cm 0.12cm;
+  margin-top: 0.02cm;
+}
+
+.labels-stage[data-template="frasco"] .maker-data div {
+  gap: 0.015cm;
+}
+
+.labels-stage[data-template="panificacionBudines"] .front-body {
+  grid-template-columns: 47% 53%;
+  padding: 0.18cm 0.34cm;
+}
+
+.labels-stage[data-template="panificacionBudines"] .logo-block img {
+  width: 2.1cm;
+  height: 2.1cm;
+}
+
+.labels-stage[data-template="panificacionBudines"] .logo-block span {
+  font-size: 0.105cm;
+  letter-spacing: 0.045cm;
+}
+
+.labels-stage[data-template="panificacionBudines"] .product-copy h2 {
+  font-size: 0.23cm;
+  line-height: 1.2;
+}
+
+.labels-stage[data-template="panificacionBudines"] .label-back {
+  padding: 0.12cm 0.18cm;
+  gap: 0.06cm;
+  line-height: 1.08;
+}
+
+.labels-stage[data-template="panificacionBudines"] .ingredients p {
+  line-height: 1.08;
+}
+
+.labels-stage[data-template="panificacionBudines"] .back-grid {
+  grid-template-columns: minmax(0, 66%) minmax(0, 1fr);
+  gap: 0.16cm;
+}
+
+.labels-stage[data-template="panificacionBudines"] .nutrition-box header {
+  padding: 0.018cm;
+}
+
+.labels-stage[data-template="panificacionBudines"] .nutrition-table {
+  line-height: 1;
+}
+
+.labels-stage[data-template="panificacionBudines"] .nutrition-table th,
+.labels-stage[data-template="panificacionBudines"] .nutrition-table td {
+  padding: 0.01cm 0.025cm;
+}
+
+.labels-stage[data-template="panificacionBudines"] .daily-note {
+  padding: 0.02cm 0.05cm;
+  line-height: 1.04;
+}
+
+.labels-stage[data-template="panificacionBudines"] .maker-data {
+  gap: 0.04cm;
+  padding-top: 0;
+  line-height: 1.12;
+}
+
+.labels-stage[data-template="panificacionBudines"] .maker-data dl {
+  gap: 0.035cm;
+  margin-top: 0.03cm;
+}
+
+.labels-stage[data-template="panificacionBudines"] .sale-note {
+  margin-top: 0.04cm;
 }
 
 @media (max-width: 980px) {
@@ -802,8 +967,7 @@ select:user-invalid {
     background: #fff;
   }
 
-  .editor,
-  .preview-toolbar {
+  .editor {
     display: none;
   }
 
@@ -816,16 +980,16 @@ select:user-invalid {
 
   .labels-stage {
     display: grid;
-    grid-template-columns: 10cm;
-    grid-auto-rows: 10cm;
+    grid-template-columns: var(--label-w);
+    grid-auto-rows: var(--label-h);
     gap: 8mm;
     align-items: start;
     justify-content: center;
   }
 
   .label {
-    width: 10cm;
-    height: 10cm;
+    width: var(--label-w);
+    height: var(--label-h);
     transform: none;
     margin: 0;
     border: 1.2pt solid #000;
@@ -857,23 +1021,8 @@ select:user-invalid {
     page-break-after: auto;
   }
 
-  .labels-stage[data-view="front"] .label-front {
-    break-after: auto;
-    page-break-after: auto;
-  }
-
-  .labels-stage[data-view="front"] .label-back,
-  .labels-stage[data-view="back"] .label-front {
-    display: none;
-  }
-
-  .labels-stage[data-view="front"],
-  .labels-stage[data-view="back"] {
+  .label-front,
+  .label-back {
     display: block;
-  }
-
-  .labels-stage[data-view="front"] .label-front,
-  .labels-stage[data-view="back"] .label-back {
-    margin: 0 auto;
   }
 }

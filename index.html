@@ -19,10 +19,10 @@
         <div class="brand-row">
           <div>
             <h1>Etiquetas</h1>
-            <p>Frente y dorso - 10 cm x 10 cm</p>
+            <p id="labelSizeHint">Elegir categoria y formato para comenzar</p>
           </div>
           <div class="print-actions">
-            <button class="primary" id="printBtn" type="button">Imprimir vista</button>
+            <button class="primary" id="printBtn" type="button">Imprimir etiquetas</button>
             <span class="print-help">Si el navegador bloquea el dialogo, usar Ctrl+P.</span>
             <span class="print-message" id="printMessage" aria-live="polite"></span>
           </div>
@@ -34,6 +34,34 @@
         </div>
 
         <form class="panel is-active" id="frontal" autocomplete="off">
+          <fieldset class="form-group">
+            <legend>Tipo de etiqueta</legend>
+            <label>
+              Categoria y formato
+              <select name="labelTemplate" required>
+                <option value="" selected disabled>Seleccionar tipo de etiqueta</option>
+                <option value="frasco">Frascos - 6 cm x 7 cm</option>
+                <option value="panificacionOtros">Panificacion / Otros - 10 cm x 10 cm</option>
+                <option value="panificacionBudines">Panificacion / Budines - 10 cm x 5 cm</option>
+              </select>
+            </label>
+            <label>
+              Tamano de octogonos
+              <select name="octagonMode" required>
+                <option value="provisorio" selected>Provisorio para diseno</option>
+                <option value="normativo">Calcular por superficie del envase</option>
+              </select>
+            </label>
+            <label class="surface-field" data-surface-field>
+              Superficie de cara principal del envase
+              <span class="suffix-field">
+                <input name="productSurface" type="number" min="0.01" step="0.01" placeholder="Ej: 42">
+                <span>cm2</span>
+              </span>
+              <span class="field-help">Usar la superficie expuesta principal del producto terminado, no el area de la etiqueta.</span>
+            </label>
+          </fieldset>
+
           <fieldset class="form-group">
             <legend>Octogonos frontales</legend>
             <label class="check"><input type="checkbox" name="excesoAzucares" checked> Exceso en azucares</label>
@@ -149,7 +177,7 @@
             </label>
             <label>
               No de GIP / Registro
-              <input name="gip" value="1497/2025" required>
+              <input name="gip" value="1267/2025-01" inputmode="numeric" maxlength="12" placeholder="1267/2025-01" pattern="\d{4}/\d{4}-(0[1-9]|[1-9][0-9])" required>
             </label>
             <label>
               Conservacion
@@ -158,11 +186,11 @@
             <div class="field-grid">
               <label>
                 Fecha de elaboracion
-                <input name="fechaElaboracion" inputmode="numeric" maxlength="10" placeholder="dd/mm/aaaa" data-date-mask required>
+                <input name="fechaElaboracion" inputmode="numeric" maxlength="10" placeholder="dd/mm/aaaa" data-date-mask data-min-year="2020" data-max-year="2099" required>
               </label>
               <label>
                 Fecha de vencimiento
-                <input name="fechaVencimiento" inputmode="numeric" maxlength="10" placeholder="dd/mm/aaaa" data-date-mask required>
+                <input name="fechaVencimiento" inputmode="numeric" maxlength="10" placeholder="dd/mm/aaaa" data-date-mask data-min-year="2020" data-max-year="2099" required>
               </label>
             </div>
             <label>
@@ -175,11 +203,6 @@
       </section>
 
       <section class="preview" aria-label="Vista previa">
-        <div class="preview-toolbar">
-          <button class="view-toggle is-active" type="button" data-view="front">Frente</button>
-          <button class="view-toggle" type="button" data-view="back">Dorso</button>
-          <button class="view-toggle" type="button" data-view="both">Ambas</button>
-        </div>
         <div class="labels-stage" id="labelsStage">
           <article class="label label-front" data-label="front">
             <div class="octagon-strip" data-octagons></div>
@@ -208,7 +231,7 @@
 
           <article class="label label-back" data-label="back">
             <section class="ingredients">
-              <p><strong>Ingredientes:</strong> <span data-bind="ingredientes"></span></p>
+              <p><strong>Ingredientes:</strong> <span data-bind-rich="ingredientes"></span></p>
             </section>
             <div class="back-grid">
               <section class="nutrition-box">

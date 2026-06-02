@@ -1,4 +1,7 @@
 const defaults = {
+  labelTemplate: "",
+  octagonMode: "provisorio",
+  productSurface: "",
   marca: "ALGO DULCE",
   rubro: "REPOSTERIA",
   producto: "Alfajor relleno de dulce de leche con bano de producto de reposteria semiamargo",
@@ -44,7 +47,7 @@ const defaults = {
   ingredientes: "Harina de trigo 0000 enriquecida segun Ley 25630 (hierro: 30 mg/kg, acido folico: 2.2 mg/kg, tiamina (B1): 6.3 mg/kg, riboflavina (B2): 1.3 mg/kg, niacina: 13 mg/kg), manteca, azucar rubio, avena, huevo, azucar, almidon de maiz, bicarbonato de sodio, sal, canela molida. CONTIENE AVENA, HUEVO, SULFITOS Y DERIVADOS DE TRIGO Y LECHE.",
   elaboradoPor: "Jaquelina Pecora - Jorgito",
   domicilio: "1912 - Rosario - Sta Fe",
-  gip: "1497/2025",
+  gip: "1267/2025-01",
   conservacion: "Conservar en lugar fresco y seco",
   fechaElaboracion: "",
   fechaVencimiento: "",
@@ -73,21 +76,78 @@ const sealLabels = [
   ["excesoAzucares", "Exceso en azucares", "octogono-excesoenazucares.png"],
   ["excesoGrasasTotales", "Exceso en grasas totales", "octogono-excesoengrasastotales.png"],
   ["excesoGrasasSaturadas", "Exceso en grasas saturadas", "octogono-excesoengrasassaturadas.png"],
-  ["excesoCalorias", "Exceso en calorias", "octogono-excesoencalorias.png"],
-  ["excesoSodio", "Exceso en sodio", "octogono-excesoensodio.png"]
+  ["excesoSodio", "Exceso en sodio", "octogono-excesoensodio.png"],
+  ["excesoCalorias", "Exceso en calorias", "octogono-excesoencalorias.png"]
+];
+
+const labelTemplates = {
+  frasco: {
+    hint: "Frente y dorso - Frascos - 6 cm x 7 cm",
+    widthCm: 6,
+    heightCm: 7,
+    provisionalOctagonCm: 0.78,
+    logoMax: 0.42,
+    logoMin: 0.22,
+    productMax: 0.24,
+    productMin: 0.16
+  },
+  panificacionOtros: {
+    hint: "Frente y dorso - Panificacion / Otros - 10 cm x 10 cm",
+    widthCm: 10,
+    heightCm: 10,
+    provisionalOctagonCm: 1.15,
+    logoMax: 0.52,
+    logoMin: 0.28,
+    productMax: 0.32,
+    productMin: 0.2
+  },
+  panificacionBudines: {
+    hint: "Frente y dorso - Panificacion / Budines - 10 cm x 5 cm",
+    widthCm: 10,
+    heightCm: 5,
+    provisionalOctagonCm: 0.85,
+    logoMax: 0.36,
+    logoMin: 0.2,
+    productMax: 0.23,
+    productMin: 0.16
+  }
+};
+
+const octagonSizeTable = [
+  { min: 10, max: 15, size: 1.1, exclusiveMin: true },
+  { min: 15, max: 20, size: 1.3 },
+  { min: 20, max: 25, size: 1.4 },
+  { min: 25, max: 30, size: 1.5 },
+  { min: 30, max: 35, size: 1.7 },
+  { min: 35, max: 40, size: 1.8 },
+  { min: 40, max: 50, size: 2.0 },
+  { min: 50, max: 60, size: 2.2 },
+  { min: 60, max: 80, size: 2.5 },
+  { min: 80, max: 100, size: 2.8 },
+  { min: 100, max: 125, size: 3.1 },
+  { min: 125, max: 150, size: 3.4 },
+  { min: 150, max: 200, size: 3.9 },
+  { min: 200, max: 250, size: 4.4 },
+  { min: 250, max: 300, size: 4.8 }
 ];
 
 const forms = document.querySelectorAll("form");
 const fields = document.querySelectorAll("input[name], textarea[name], select[name]");
+const labelTemplateField = document.querySelector("select[name='labelTemplate']");
+const octagonModeField = document.querySelector("select[name='octagonMode']");
+const productSurfaceField = document.querySelector("input[name='productSurface']");
+const surfaceFieldWrap = document.querySelector("[data-surface-field]");
 const nutritionRows = document.querySelector("#nutritionRows");
 const octagonStrip = document.querySelector("[data-octagons]");
 const stage = document.querySelector("#labelsStage");
+const labelSizeHint = document.querySelector("#labelSizeHint");
 const logo = document.querySelector("#brandLogo");
 const logoInput = document.querySelector("input[name='logo']");
 const logoFileName = document.querySelector("#logoFileName");
 const logoError = document.querySelector("#logoError");
 const manufacturerForm = document.querySelector("#dorso");
 const dateFields = document.querySelectorAll("[data-date-mask]");
+const gipField = document.querySelector("input[name='gip']");
 const printMessage = document.querySelector("#printMessage");
 const vdDashFields = document.querySelectorAll(".vd-field input[type='checkbox']");
 const cropModal = document.querySelector("#cropModal");
@@ -193,8 +253,83 @@ function renderOctagons(state) {
     .join("");
 }
 
+function activeSealCount(state) {
+  return sealLabels.filter(([key]) => state[key]).length;
+}
+
+function tableOctagonSize(area) {
+  const row = octagonSizeTable.find(({ min, max, exclusiveMin }) => {
+    const minMatches = exclusiveMin ? area > min : area >= min;
+    return minMatches && area < max;
+  });
+  if (row) return row.size;
+  if (area > 300) {
+    const sealArea = area * 0.05;
+    return Math.ceil(Math.sqrt(sealArea * 1.5) * 1000) / 1000;
+  }
+  if (area <= 10) {
+    const sealArea = area * 0.15;
+    return Math.ceil(Math.sqrt(sealArea * 1.5) * 1000) / 1000;
+  }
+  return 1.1;
+}
+
+function octagonMetrics(state, template) {
+  const count = activeSealCount(state);
+  if (state.octagonMode !== "normativo") {
+    return {
+      count,
+      mode: "provisorio",
+      size: template.provisionalOctagonCm
+    };
+  }
+
+  const productSurface = Number(state.productSurface);
+  const usesAds = count >= 2 && productSurface >= 20 && productSurface <= 300;
+  const referenceArea = usesAds ? productSurface * 0.65 : productSurface;
+  return {
+    count,
+    mode: "normativo",
+    productSurface,
+    referenceArea,
+    usesAds,
+    size: tableOctagonSize(referenceArea)
+  };
+}
+
+function applyOctagonSizing(state, template) {
+  const metrics = octagonMetrics(state, template);
+  stage.style.setProperty("--octagon-size", `${metrics.size}cm`);
+  stage.style.setProperty("--front-top-space", `${metrics.size + 0.18}cm`);
+  return metrics;
+}
+
+function syncSurfaceField(state) {
+  const isNormative = state.octagonMode === "normativo";
+  surfaceFieldWrap.classList.toggle("is-hidden", !isNormative);
+  productSurfaceField.required = isNormative;
+  productSurfaceField.disabled = !isNormative;
+}
+
+function renderIngredients(state) {
+  document.querySelectorAll("[data-bind-rich='ingredientes']").forEach((node) => {
+    const safeIngredients = escapeHtml(state.ingredientes);
+    node.innerHTML = safeIngredients.replace(/(CONTIENE\b[\s\S]*?)(\.|$)/i, "<strong>$1$2</strong>");
+  });
+}
+
 function render() {
   const state = readState();
+  const template = labelTemplates[state.labelTemplate] || labelTemplates.panificacionOtros;
+  stage.dataset.template = state.labelTemplate || "panificacionOtros";
+  const octagonMetrics = applyOctagonSizing(state, template);
+  const normativeHint = octagonMetrics.mode === "normativo"
+    ? `Superficie envase ${displayNumber(octagonMetrics.productSurface)} cm2 - ${octagonMetrics.usesAds ? `ADS ${displayNumber(octagonMetrics.referenceArea)} cm2 - ` : ""}Octogonos ${displayNumber(octagonMetrics.size)} cm`
+    : `Octogonos provisorios ${displayNumber(octagonMetrics.size)} cm`;
+  labelSizeHint.textContent = state.labelTemplate
+    ? `${template.hint} - ${normativeHint}`
+    : "Elegir categoria y formato para comenzar";
+  syncSurfaceField(state);
   document.querySelectorAll("[data-bind]").forEach((node) => {
     node.textContent = state[node.dataset.bind] || "";
   });
@@ -203,7 +338,9 @@ function render() {
   });
   renderNutrition(state);
   renderOctagons(state);
-  fitText(document.querySelector(".logo-block strong"), 0.58, 0.32);
+  renderIngredients(state);
+  fitText(document.querySelector(".logo-block strong"), template.logoMax, template.logoMin);
+  fitText(document.querySelector(".product-copy h2"), template.productMax, template.productMin);
 }
 
 function escapeHtml(value) {
@@ -224,20 +361,16 @@ document.querySelectorAll(".tab").forEach((tab) => {
   tab.addEventListener("click", () => activatePanel(tab.dataset.panel));
 });
 
-document.querySelectorAll(".view-toggle").forEach((button) => {
-  button.addEventListener("click", () => {
-    document.querySelectorAll(".view-toggle").forEach((el) => el.classList.remove("is-active"));
-    button.classList.add("is-active");
-    stage.dataset.view = button.dataset.view;
-  });
-});
-
 forms.forEach((form) => {
-  form.addEventListener("input", () => {
+  const handleFormUpdate = () => {
     printMessage.textContent = "";
+    validateLabelTemplateField();
+    validateProductSurfaceField();
     syncDailyValueControls();
     render();
-  });
+  };
+  form.addEventListener("input", handleFormUpdate);
+  form.addEventListener("change", handleFormUpdate);
 });
 
 vdDashFields.forEach((field) => {
@@ -251,21 +384,96 @@ function formatDateInput(value) {
   return `${digits.slice(0, 2)}/${digits.slice(2, 4)}/${digits.slice(4)}`;
 }
 
-function isValidDate(value) {
+function dateYearLimits(field) {
+  return {
+    min: Number(field?.dataset.minYear || 2020),
+    max: Number(field?.dataset.maxYear || 2099)
+  };
+}
+
+function isValidDate(value, field) {
   if (!/^\d{2}\/\d{2}\/\d{4}$/.test(value)) return false;
   const [day, month, year] = value.split("/").map(Number);
+  const { min, max } = dateYearLimits(field);
+  if (day < 1 || day > 31 || month < 1 || month > 12 || year < min || year > max) return false;
   const date = new Date(year, month - 1, day);
   return date.getFullYear() === year && date.getMonth() === month - 1 && date.getDate() === day;
 }
 
+function parseDate(value, field) {
+  if (!isValidDate(value, field)) return null;
+  const [day, month, year] = value.split("/").map(Number);
+  return new Date(year, month - 1, day);
+}
+
 function validateDateField(field) {
   field.value = formatDateInput(field.value);
+  const [day = "", month = "", year = ""] = field.value.split("/");
+  const { min, max } = dateYearLimits(field);
   if (!field.value) {
     field.setCustomValidity("Completar la fecha en formato dd/mm/aaaa.");
-  } else if (!isValidDate(field.value)) {
+  } else if (day.length === 2 && (Number(day) < 1 || Number(day) > 31)) {
+    field.setCustomValidity("El dia debe estar entre 01 y 31.");
+  } else if (month.length === 2 && (Number(month) < 1 || Number(month) > 12)) {
+    field.setCustomValidity("El mes debe estar entre 01 y 12.");
+  } else if (year.length === 4 && (Number(year) < min || Number(year) > max)) {
+    field.setCustomValidity(`El ano debe estar entre ${min} y ${max}.`);
+  } else if (!isValidDate(field.value, field)) {
     field.setCustomValidity("Usar una fecha valida en formato dd/mm/aaaa.");
   } else {
     field.setCustomValidity("");
+  }
+}
+
+function validateDateRange() {
+  const elaboracion = document.querySelector("input[name='fechaElaboracion']");
+  const vencimiento = document.querySelector("input[name='fechaVencimiento']");
+  const elaboracionDate = parseDate(elaboracion.value, elaboracion);
+  const vencimientoDate = parseDate(vencimiento.value, vencimiento);
+  if (elaboracionDate && vencimientoDate && vencimientoDate < elaboracionDate) {
+    vencimiento.setCustomValidity("La fecha de vencimiento no puede ser anterior a la fecha de elaboracion.");
+  }
+}
+
+function formatGipInput(value) {
+  const digits = value.replace(/\D/g, "").slice(0, 10);
+  if (digits.length <= 4) return digits;
+  if (digits.length <= 8) return `${digits.slice(0, 4)}/${digits.slice(4)}`;
+  return `${digits.slice(0, 4)}/${digits.slice(4, 8)}-${digits.slice(8)}`;
+}
+
+function validateGipField() {
+  gipField.value = formatGipInput(gipField.value);
+  if (!gipField.value) {
+    gipField.setCustomValidity("Completar el GIP en formato 1267/2025-01.");
+  } else if (!/^\d{4}\/\d{4}-(0[1-9]|[1-9][0-9])$/.test(gipField.value)) {
+    gipField.setCustomValidity("Usar el formato 1267/2025-01, con registro final de 01 a 99.");
+  } else {
+    gipField.setCustomValidity("");
+  }
+}
+
+function validateLabelTemplateField() {
+  if (!labelTemplateField.value) {
+    labelTemplateField.setCustomValidity("Elegir que tipo de etiqueta se va a armar.");
+  } else {
+    labelTemplateField.setCustomValidity("");
+  }
+}
+
+function validateProductSurfaceField() {
+  syncSurfaceField(readState());
+  if (octagonModeField.value !== "normativo") {
+    productSurfaceField.setCustomValidity("");
+    return;
+  }
+  const value = Number(productSurfaceField.value);
+  if (!productSurfaceField.value) {
+    productSurfaceField.setCustomValidity("Completar la superficie principal del envase final.");
+  } else if (!Number.isFinite(value) || value <= 0) {
+    productSurfaceField.setCustomValidity("La superficie del envase debe ser mayor a cero.");
+  } else {
+    productSurfaceField.setCustomValidity("");
   }
 }
 
@@ -281,6 +489,10 @@ function fieldLabel(field) {
 
 function firstInvalidManufacturerField() {
   dateFields.forEach(validateDateField);
+  validateDateRange();
+  validateLabelTemplateField();
+  validateProductSurfaceField();
+  validateGipField();
   return document.querySelector(".editor form :invalid");
 }
 
@@ -354,11 +566,21 @@ function applyCrop() {
 
 dateFields.forEach((field) => {
   field.addEventListener("input", () => {
-    validateDateField(field);
+    dateFields.forEach(validateDateField);
+    validateDateRange();
     render();
   });
-  field.addEventListener("blur", () => validateDateField(field));
+  field.addEventListener("blur", () => {
+    dateFields.forEach(validateDateField);
+    validateDateRange();
+  });
 });
+
+gipField.addEventListener("input", () => {
+  validateGipField();
+  render();
+});
+gipField.addEventListener("blur", validateGipField);
 
 logoInput.addEventListener("change", (event) => {
   const file = event.target.files[0];
@@ -431,11 +653,19 @@ document.querySelector("#resetBtn").addEventListener("click", () => {
   logoFileName.textContent = "Sin imagen seleccionada";
   logoError.textContent = "";
   dateFields.forEach(validateDateField);
+  validateDateRange();
+  validateLabelTemplateField();
+  validateProductSurfaceField();
+  validateGipField();
   render();
 });
 
-stage.dataset.view = "front";
+stage.dataset.template = "panificacionOtros";
 writeState(defaults);
 syncDailyValueControls();
 dateFields.forEach(validateDateField);
+validateDateRange();
+validateLabelTemplateField();
+validateProductSurfaceField();
+validateGipField();
 render();
