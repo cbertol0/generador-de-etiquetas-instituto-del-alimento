@@ -500,7 +500,7 @@ select:user-invalid {
   --octagon-size: 1.08cm;
   --octagon-gap: 0;
   --label-font-factor: 0.72;
-  --back-font-factor: 0.56;
+  --back-font-factor: 0.7;
 }
 
 .labels-stage[data-template="panificacionCookies"] {
@@ -510,7 +510,7 @@ select:user-invalid {
   --octagon-size: 1.05cm;
   --octagon-gap: 0;
   --label-font-factor: 0.78;
-  --back-font-factor: 0.78;
+  --back-font-factor: 0.9;
 }
 
 .label {
@@ -793,6 +793,46 @@ select:user-invalid {
   padding: 0.34cm;
 }
 
+.labels-stage[data-template="panificacionOtros"] .back-grid {
+  grid-template-columns: 1fr;
+  gap: 0.24cm;
+  justify-items: center;
+}
+
+.labels-stage[data-template="panificacionOtros"] .nutrition-box {
+  width: 6.8cm;
+  max-width: 100%;
+}
+
+.labels-stage[data-template="panificacionOtros"] .maker-data {
+  width: 7.2cm;
+  max-width: 100%;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.14cm 0.35cm;
+  padding-top: 0;
+}
+
+.labels-stage[data-template="panificacionOtros"] .maker-data p,
+.labels-stage[data-template="panificacionOtros"] .maker-data dl {
+  margin: 0;
+}
+
+.labels-stage[data-template="panificacionOtros"] .maker-data p:first-child,
+.labels-stage[data-template="panificacionOtros"] .maker-data .sale-note {
+  grid-column: 1 / -1;
+}
+
+.labels-stage[data-template="panificacionOtros"] .maker-data dl {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.12cm 0.28cm;
+}
+
+.labels-stage[data-template="panificacionOtros"] .maker-data div {
+  gap: 0.03cm;
+}
+
 .labels-stage[data-template="frasco"] .logo-block {
   gap: 0.055cm;
 }
@@ -1002,6 +1042,7 @@ select:user-invalid {
 .labels-stage[data-template="panificacionBudines"] .maker-data {
   gap: 0.04cm;
   padding-top: 0;
+  font-size: calc(0.245cm * var(--back-font-factor));
   line-height: 1.12;
 }
 
