@@ -510,7 +510,7 @@ select:user-invalid {
   --octagon-size: 1.05cm;
   --octagon-gap: 0;
   --label-font-factor: 0.78;
-  --back-font-factor: 0.6;
+  --back-font-factor: 0.78;
 }
 
 .label {
@@ -886,50 +886,60 @@ select:user-invalid {
   line-height: 1.22;
 }
 
+.labels-stage[data-template="panificacionCookies"] .product-copy {
+  transform: translateX(-0.22cm);
+}
+
 .labels-stage[data-template="panificacionCookies"] .back-grid {
   grid-template-columns: 1fr;
-  gap: 0.08cm;
+  gap: 0.06cm;
 }
 
 .labels-stage[data-template="panificacionCookies"] .label-back {
-  padding: 0.14cm 0.16cm;
-  gap: 0.08cm;
-  line-height: 1.12;
+  padding: 0.12cm 0.14cm;
+  gap: 0.06cm;
+  line-height: 1.08;
 }
 
 .labels-stage[data-template="panificacionCookies"] .ingredients p {
-  line-height: 1.12;
+  line-height: 1.08;
+}
+
+.labels-stage[data-template="panificacionCookies"] .nutrition-box {
+  border-width: 0.015cm;
 }
 
 .labels-stage[data-template="panificacionCookies"] .nutrition-box header {
-  padding: 0.025cm;
+  border-bottom-width: 0.015cm;
+  padding: 0.018cm;
 }
 
 .labels-stage[data-template="panificacionCookies"] .nutrition-table {
-  line-height: 1;
+  line-height: 0.98;
 }
 
 .labels-stage[data-template="panificacionCookies"] .nutrition-table th,
 .labels-stage[data-template="panificacionCookies"] .nutrition-table td {
-  padding: 0.014cm 0.03cm;
+  border-width: 0.015cm;
+  padding: 0.008cm 0.02cm;
 }
 
 .labels-stage[data-template="panificacionCookies"] .daily-note {
-  padding: 0.03cm 0.06cm;
-  line-height: 1.06;
+  padding: 0.02cm 0.045cm;
+  line-height: 1.03;
 }
 
 .labels-stage[data-template="panificacionCookies"] .maker-data {
-  gap: 0.045cm;
+  gap: 0.035cm;
   padding-top: 0;
-  line-height: 1.14;
+  line-height: 1.08;
 }
 
 .labels-stage[data-template="panificacionCookies"] .maker-data dl {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 0.04cm 0.12cm;
-  margin-top: 0.03cm;
+  gap: 0.03cm 0.1cm;
+  margin-top: 0.02cm;
 }
 
 .labels-stage[data-template="panificacionCookies"] .maker-data div {
@@ -1103,6 +1113,16 @@ select:user-invalid {
   .nutrition-table th,
   .nutrition-table td {
     border-style: solid;
+  }
+
+  .labels-stage[data-template="panificacionCookies"] .nutrition-box,
+  .labels-stage[data-template="panificacionCookies"] .nutrition-table th,
+  .labels-stage[data-template="panificacionCookies"] .nutrition-table td {
+    border-width: 0.6pt;
+  }
+
+  .labels-stage[data-template="panificacionCookies"] .nutrition-box header {
+    border-bottom-width: 0.6pt;
   }
 
   .label:last-child {
