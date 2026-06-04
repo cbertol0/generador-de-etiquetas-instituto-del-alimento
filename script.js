@@ -44,7 +44,8 @@ const defaults = {
   sodioValor: "120",
   sodioVdValor: "5",
   sodioVdDash: false,
-  ingredientes: "Harina de trigo 0000 enriquecida segun Ley 25630 (hierro: 30 mg/kg, acido folico: 2.2 mg/kg, tiamina (B1): 6.3 mg/kg, riboflavina (B2): 1.3 mg/kg, niacina: 13 mg/kg), manteca, azucar rubio, avena, huevo, azucar, almidon de maiz, bicarbonato de sodio, sal, canela molida. CONTIENE AVENA, HUEVO, SULFITOS Y DERIVADOS DE TRIGO Y LECHE.",
+  ingredientes: "Harina de trigo 0000 enriquecida segun Ley 25630 (hierro: 30 mg/kg, acido folico: 2.2 mg/kg, tiamina (B1): 6.3 mg/kg, riboflavina (B2): 1.3 mg/kg, niacina: 13 mg/kg), manteca, azucar rubio, avena, huevo, azucar, almidon de maiz, bicarbonato de sodio, sal, canela molida.",
+  alergenos: "CONTIENE AVENA, HUEVO, SULFITOS Y DERIVADOS DE TRIGO Y LECHE.",
   elaboradoPor: "Jaquelina Pecora - Jorgito",
   domicilio: "1912 - Rosario - Sta Fe",
   gip: "1267/2025-01",
@@ -110,6 +111,16 @@ const labelTemplates = {
     logoMin: 0.2,
     productMax: 0.23,
     productMin: 0.16
+  },
+  panificacionCookies: {
+    hint: "Frente y dorso - Panificacion / Cookies - 7 cm x 7 cm",
+    widthCm: 7,
+    heightCm: 7,
+    provisionalOctagonCm: 0.72,
+    logoMax: 0.4,
+    logoMin: 0.22,
+    productMax: 0.25,
+    productMin: 0.16
   }
 };
 
@@ -137,6 +148,7 @@ const labelTemplateField = document.querySelector("select[name='labelTemplate']"
 const octagonModeField = document.querySelector("select[name='octagonMode']");
 const productSurfaceField = document.querySelector("input[name='productSurface']");
 const surfaceFieldWrap = document.querySelector("[data-surface-field]");
+const allergensField = document.querySelector("textarea[name='alergenos']");
 const nutritionRows = document.querySelector("#nutritionRows");
 const octagonStrip = document.querySelector("[data-octagons]");
 const stage = document.querySelector("#labelsStage");
@@ -299,8 +311,10 @@ function octagonMetrics(state, template) {
 
 function applyOctagonSizing(state, template) {
   const metrics = octagonMetrics(state, template);
+  const maxSealsPerRow = Math.max(1, Math.floor(template.widthCm / metrics.size));
+  const sealRows = Math.max(1, Math.ceil(metrics.count / maxSealsPerRow));
   stage.style.setProperty("--octagon-size", `${metrics.size}cm`);
-  stage.style.setProperty("--front-top-space", `${metrics.size + 0.18}cm`);
+  stage.style.setProperty("--front-top-space", `${metrics.size * sealRows + 0.18}cm`);
   return metrics;
 }
 
@@ -309,13 +323,6 @@ function syncSurfaceField(state) {
   surfaceFieldWrap.classList.toggle("is-hidden", !isNormative);
   productSurfaceField.required = isNormative;
   productSurfaceField.disabled = !isNormative;
-}
-
-function renderIngredients(state) {
-  document.querySelectorAll("[data-bind-rich='ingredientes']").forEach((node) => {
-    const safeIngredients = escapeHtml(state.ingredientes);
-    node.innerHTML = safeIngredients.replace(/(CONTIENE\b[\s\S]*?)(\.|$)/i, "<strong>$1$2</strong>");
-  });
 }
 
 function render() {
@@ -338,7 +345,6 @@ function render() {
   });
   renderNutrition(state);
   renderOctagons(state);
-  renderIngredients(state);
   fitText(document.querySelector(".logo-block strong"), template.logoMax, template.logoMin);
   fitText(document.querySelector(".product-copy h2"), template.productMax, template.productMin);
 }
@@ -366,6 +372,7 @@ forms.forEach((form) => {
     printMessage.textContent = "";
     validateLabelTemplateField();
     validateProductSurfaceField();
+    syncAllergensField();
     syncDailyValueControls();
     render();
   };
@@ -411,7 +418,7 @@ function validateDateField(field) {
   const [day = "", month = "", year = ""] = field.value.split("/");
   const { min, max } = dateYearLimits(field);
   if (!field.value) {
-    field.setCustomValidity("Completar la fecha en formato dd/mm/aaaa.");
+    field.setCustomValidity("");
   } else if (day.length === 2 && (Number(day) < 1 || Number(day) > 31)) {
     field.setCustomValidity("El dia debe estar entre 01 y 31.");
   } else if (month.length === 2 && (Number(month) < 1 || Number(month) > 12)) {
@@ -477,6 +484,15 @@ function validateProductSurfaceField() {
   }
 }
 
+function syncAllergensField() {
+  allergensField.value = allergensField.value.toUpperCase();
+  if (!allergensField.value.trim()) {
+    allergensField.setCustomValidity("Completar los alergenos en mayusculas.");
+  } else {
+    allergensField.setCustomValidity("");
+  }
+}
+
 function fieldLabel(field) {
   const label = field.closest("label");
   if (!label) return "un campo obligatorio";
@@ -492,6 +508,7 @@ function firstInvalidManufacturerField() {
   validateDateRange();
   validateLabelTemplateField();
   validateProductSurfaceField();
+  syncAllergensField();
   validateGipField();
   return document.querySelector(".editor form :invalid");
 }
@@ -656,6 +673,7 @@ document.querySelector("#resetBtn").addEventListener("click", () => {
   validateDateRange();
   validateLabelTemplateField();
   validateProductSurfaceField();
+  syncAllergensField();
   validateGipField();
   render();
 });
@@ -667,5 +685,6 @@ dateFields.forEach(validateDateField);
 validateDateRange();
 validateLabelTemplateField();
 validateProductSurfaceField();
+syncAllergensField();
 validateGipField();
 render();

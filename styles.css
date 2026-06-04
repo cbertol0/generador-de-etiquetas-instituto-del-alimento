@@ -503,6 +503,16 @@ select:user-invalid {
   --back-font-factor: 0.56;
 }
 
+.labels-stage[data-template="panificacionCookies"] {
+  --label-w: 7cm;
+  --label-h: 7cm;
+  --front-top-space: 1.12cm;
+  --octagon-size: 1.05cm;
+  --octagon-gap: 0;
+  --label-font-factor: 0.78;
+  --back-font-factor: 0.6;
+}
+
 .label {
   position: relative;
   width: var(--label-w);
@@ -631,7 +641,8 @@ select:user-invalid {
   transform: none;
 }
 
-.labels-stage[data-template="frasco"] .octagon-strip {
+.labels-stage[data-template="frasco"] .octagon-strip,
+.labels-stage[data-template="panificacionCookies"] .octagon-strip {
   left: 50%;
   right: auto;
   top: 3px;
@@ -661,6 +672,10 @@ select:user-invalid {
   font-size: calc(0.22cm * var(--back-font-factor));
   line-height: 1.32;
   overflow-wrap: anywhere;
+}
+
+.ingredients .allergen-line {
+  margin-top: 0.03cm;
 }
 
 .ingredients strong {
@@ -845,6 +860,80 @@ select:user-invalid {
 
 .labels-stage[data-template="frasco"] .maker-data div {
   gap: 0.015cm;
+}
+
+.labels-stage[data-template="panificacionCookies"] .front-body {
+  grid-template-columns: 46% 54%;
+  padding: 0.2cm 0.28cm 0.28cm;
+}
+
+.labels-stage[data-template="panificacionCookies"] .logo-block {
+  gap: 0.07cm;
+}
+
+.labels-stage[data-template="panificacionCookies"] .logo-block img {
+  width: 2.1cm;
+  height: 2.1cm;
+}
+
+.labels-stage[data-template="panificacionCookies"] .logo-block span {
+  font-size: 0.105cm;
+  letter-spacing: 0.045cm;
+}
+
+.labels-stage[data-template="panificacionCookies"] .product-copy h2 {
+  font-size: 0.25cm;
+  line-height: 1.22;
+}
+
+.labels-stage[data-template="panificacionCookies"] .back-grid {
+  grid-template-columns: 1fr;
+  gap: 0.08cm;
+}
+
+.labels-stage[data-template="panificacionCookies"] .label-back {
+  padding: 0.14cm 0.16cm;
+  gap: 0.08cm;
+  line-height: 1.12;
+}
+
+.labels-stage[data-template="panificacionCookies"] .ingredients p {
+  line-height: 1.12;
+}
+
+.labels-stage[data-template="panificacionCookies"] .nutrition-box header {
+  padding: 0.025cm;
+}
+
+.labels-stage[data-template="panificacionCookies"] .nutrition-table {
+  line-height: 1;
+}
+
+.labels-stage[data-template="panificacionCookies"] .nutrition-table th,
+.labels-stage[data-template="panificacionCookies"] .nutrition-table td {
+  padding: 0.014cm 0.03cm;
+}
+
+.labels-stage[data-template="panificacionCookies"] .daily-note {
+  padding: 0.03cm 0.06cm;
+  line-height: 1.06;
+}
+
+.labels-stage[data-template="panificacionCookies"] .maker-data {
+  gap: 0.045cm;
+  padding-top: 0;
+  line-height: 1.14;
+}
+
+.labels-stage[data-template="panificacionCookies"] .maker-data dl {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.04cm 0.12cm;
+  margin-top: 0.03cm;
+}
+
+.labels-stage[data-template="panificacionCookies"] .maker-data div {
+  gap: 0.02cm;
 }
 
 .labels-stage[data-template="panificacionBudines"] .front-body {

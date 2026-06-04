@@ -43,6 +43,7 @@
                 <option value="frasco">Frascos - 6 cm x 7 cm</option>
                 <option value="panificacionOtros">Panificacion / Otros - 10 cm x 10 cm</option>
                 <option value="panificacionBudines">Panificacion / Budines - 10 cm x 5 cm</option>
+                <option value="panificacionCookies">Panificacion / Cookies - 7 cm x 7 cm</option>
               </select>
             </label>
             <label>
@@ -139,7 +140,12 @@
             <legend>Informacion nutricional</legend>
             <label>
               Ingredientes
-              <textarea name="ingredientes" rows="5">Harina de trigo 0000 enriquecida segun Ley 25630 (hierro: 30 mg/kg, acido folico: 2.2 mg/kg, tiamina (B1): 6.3 mg/kg, riboflavina (B2): 1.3 mg/kg, niacina: 13 mg/kg), manteca, azucar rubio, avena, huevo, azucar, almidon de maiz, bicarbonato de sodio, sal, canela molida. CONTIENE AVENA, HUEVO, SULFITOS Y DERIVADOS DE TRIGO Y LECHE.</textarea>
+              <textarea name="ingredientes" rows="5">Harina de trigo 0000 enriquecida segun Ley 25630 (hierro: 30 mg/kg, acido folico: 2.2 mg/kg, tiamina (B1): 6.3 mg/kg, riboflavina (B2): 1.3 mg/kg, niacina: 13 mg/kg), manteca, azucar rubio, avena, huevo, azucar, almidon de maiz, bicarbonato de sodio, sal, canela molida.</textarea>
+            </label>
+            <label>
+              Alergenos
+              <textarea name="alergenos" rows="2" required>CONTIENE AVENA, HUEVO, SULFITOS Y DERIVADOS DE TRIGO Y LECHE.</textarea>
+              <span class="field-help">Este texto se imprime en negrita y se convierte automaticamente a mayusculas.</span>
             </label>
             <div class="field-grid">
               <label>
@@ -186,11 +192,11 @@
             <div class="field-grid">
               <label>
                 Fecha de elaboracion
-                <input name="fechaElaboracion" inputmode="numeric" maxlength="10" placeholder="dd/mm/aaaa" data-date-mask data-min-year="2020" data-max-year="2099" required>
+                <input name="fechaElaboracion" inputmode="numeric" maxlength="10" placeholder="dd/mm/aaaa" data-date-mask data-min-year="2020" data-max-year="2099">
               </label>
               <label>
                 Fecha de vencimiento
-                <input name="fechaVencimiento" inputmode="numeric" maxlength="10" placeholder="dd/mm/aaaa" data-date-mask data-min-year="2020" data-max-year="2099" required>
+                <input name="fechaVencimiento" inputmode="numeric" maxlength="10" placeholder="dd/mm/aaaa" data-date-mask data-min-year="2020" data-max-year="2099">
               </label>
             </div>
             <label>
@@ -231,7 +237,8 @@
 
           <article class="label label-back" data-label="back">
             <section class="ingredients">
-              <p><strong>Ingredientes:</strong> <span data-bind-rich="ingredientes"></span></p>
+              <p><strong>Ingredientes:</strong> <span data-bind="ingredientes"></span></p>
+              <p class="allergen-line"><strong data-bind="alergenos"></strong></p>
             </section>
             <div class="back-grid">
               <section class="nutrition-box">
