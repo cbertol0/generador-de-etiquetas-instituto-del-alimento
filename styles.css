@@ -720,6 +720,10 @@ select:user-invalid {
   border: 0.03cm solid #111;
   padding: 0.035cm 0.05cm;
   text-align: center;
+  white-space: nowrap;
+  word-break: keep-all;
+  overflow-wrap: normal;
+  hyphens: none;
 }
 
 .nutrition-table th:first-child,
@@ -1164,13 +1168,13 @@ select:user-invalid {
     border-style: solid;
   }
 
-  .nutrition-table {
-    table-layout: fixed;
-  }
-
   .nutrition-table th,
   .nutrition-table td {
     border-style: solid;
+    white-space: nowrap;
+    word-break: keep-all;
+    overflow-wrap: normal;
+    hyphens: none;
   }
 
   .labels-stage[data-template="panificacionCookies"] .nutrition-box,
