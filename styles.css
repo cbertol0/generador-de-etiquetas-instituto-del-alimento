@@ -490,7 +490,7 @@ select:user-invalid {
   --octagon-size: 1.18cm;
   --octagon-gap: 0;
   --label-font-factor: 0.78;
-  --back-font-factor: 0.58;
+  --back-font-factor: 0.72;
 }
 
 .labels-stage[data-template="panificacionBudines"] {
@@ -826,11 +826,17 @@ select:user-invalid {
 .labels-stage[data-template="panificacionOtros"] .maker-data dl {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 0.12cm 0.28cm;
+  gap: 0.12cm 1.05cm;
+  width: 100%;
 }
 
 .labels-stage[data-template="panificacionOtros"] .maker-data div {
   gap: 0.03cm;
+}
+
+.labels-stage[data-template="panificacionOtros"] .maker-data dd {
+  min-width: 2.25cm;
+  min-height: 0.42cm;
 }
 
 .labels-stage[data-template="frasco"] .logo-block {
@@ -1013,7 +1019,12 @@ select:user-invalid {
 }
 
 .labels-stage[data-template="panificacionBudines"] .ingredients p {
+  font-size: calc(0.25cm * var(--back-font-factor));
   line-height: 1.08;
+}
+
+.labels-stage[data-template="panificacionBudines"] .ingredients strong {
+  font-size: calc(0.27cm * var(--back-font-factor));
 }
 
 .labels-stage[data-template="panificacionBudines"] .back-grid {
