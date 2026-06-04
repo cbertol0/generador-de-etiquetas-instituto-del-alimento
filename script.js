@@ -168,6 +168,9 @@ const cropStage = document.querySelector("#cropStage");
 const cropZoom = document.querySelector("#cropZoom");
 const cropApplyBtn = document.querySelector("#cropApplyBtn");
 const cropCancelBtns = document.querySelectorAll("#cropCancelBtn, #cropCancelBtn2");
+const exportDataBtn = document.querySelector("#exportDataBtn");
+const importDataBtn = document.querySelector("#importDataBtn");
+const importDataInput = document.querySelector("#importDataInput");
 const cropContext = cropCanvas.getContext("2d");
 const cropState = {
   image: null,
@@ -581,6 +584,76 @@ function applyCrop() {
   closeCropper();
 }
 
+function exportFilename(state) {
+  const product = String(state.producto || "producto")
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-|-$/g, "")
+    .slice(0, 42) || "producto";
+  return `etiqueta-${product}.json`;
+}
+
+function exportLabelData() {
+  const state = readState();
+  const payload = {
+    version: 1,
+    exportedAt: new Date().toISOString(),
+    fields: state,
+    logoSrc: logo.src.startsWith("data:image/") ? logo.src : ""
+  };
+  const blob = new Blob([JSON.stringify(payload, null, 2)], { type: "application/json" });
+  const link = document.createElement("a");
+  link.href = URL.createObjectURL(blob);
+  link.download = exportFilename(state);
+  document.body.appendChild(link);
+  link.click();
+  link.remove();
+  URL.revokeObjectURL(link.href);
+  printMessage.textContent = "Datos exportados.";
+}
+
+function applyImportedData(payload) {
+  const importedFields = payload?.fields || payload;
+  if (!importedFields || typeof importedFields !== "object") {
+    throw new Error("Archivo invalido.");
+  }
+  writeState({ ...defaults, ...importedFields });
+  if (payload.logoSrc && typeof payload.logoSrc === "string" && payload.logoSrc.startsWith("data:image/")) {
+    logo.src = payload.logoSrc;
+    logoFileName.textContent = "Logo importado";
+  } else {
+    logo.src = "assets/foto-de-producto.webp";
+    logoFileName.textContent = "Sin imagen seleccionada";
+  }
+  logoInput.value = "";
+  logoError.textContent = "";
+  dateFields.forEach(validateDateField);
+  validateDateRange();
+  validateLabelTemplateField();
+  validateProductSurfaceField();
+  syncAllergensField();
+  validateGipField();
+  render();
+  printMessage.textContent = "Datos importados.";
+}
+
+function importLabelData(file) {
+  if (!file) return;
+  const reader = new FileReader();
+  reader.addEventListener("load", () => {
+    try {
+      applyImportedData(JSON.parse(reader.result));
+    } catch (error) {
+      printMessage.textContent = "No se pudo importar el archivo JSON.";
+    } finally {
+      importDataInput.value = "";
+    }
+  });
+  reader.readAsText(file);
+}
+
 dateFields.forEach((field) => {
   field.addEventListener("input", () => {
     dateFields.forEach(validateDateField);
@@ -654,6 +727,9 @@ cropStage.addEventListener("pointerup", () => {
 
 cropApplyBtn.addEventListener("click", applyCrop);
 cropCancelBtns.forEach((button) => button.addEventListener("click", closeCropper));
+exportDataBtn.addEventListener("click", exportLabelData);
+importDataBtn.addEventListener("click", () => importDataInput.click());
+importDataInput.addEventListener("change", (event) => importLabelData(event.target.files[0]));
 
 document.querySelector("#printBtn").addEventListener("click", () => {
   if (!showManufacturerValidation()) return;

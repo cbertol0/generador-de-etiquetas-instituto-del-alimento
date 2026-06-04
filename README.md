@@ -19,6 +19,7 @@ El usuario debe elegir obligatoriamente el tipo de etiqueta antes de validar o i
 - Fechas de elaboracion y vencimiento opcionales para permitir sello manual posterior.
 - Validacion opcional de fechas si el usuario las completa.
 - Validacion del GIP con formato `1267/2025-01`.
+- Exportacion e importacion de datos completos en JSON para reutilizar productos, fabricantes y configuraciones.
 - Impresion siempre de frente y dorso.
 - Octogonos oficiales en PNG dentro de `assets/`.
 

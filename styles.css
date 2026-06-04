@@ -61,6 +61,11 @@ button {
   gap: 10px;
 }
 
+.actions {
+  flex-wrap: wrap;
+  justify-content: flex-start;
+}
+
 .site-header {
   display: flex;
   flex-direction: column;
