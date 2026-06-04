@@ -892,20 +892,21 @@ select:user-invalid {
 }
 
 .labels-stage[data-template="frasco"] .maker-data {
-  gap: 0.035cm;
+  gap: 0.075cm;
   padding-top: 0;
-  line-height: 1.12;
+  font-size: calc(0.225cm * var(--back-font-factor));
+  line-height: 1.18;
 }
 
 .labels-stage[data-template="frasco"] .maker-data dl {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 0.035cm 0.12cm;
-  margin-top: 0.02cm;
+  gap: 0.09cm 0.18cm;
+  margin-top: 0.05cm;
 }
 
 .labels-stage[data-template="frasco"] .maker-data div {
-  gap: 0.015cm;
+  gap: 0.035cm;
 }
 
 .labels-stage[data-template="panificacionCookies"] .front-body {
@@ -1058,12 +1059,12 @@ select:user-invalid {
 }
 
 .labels-stage[data-template="panificacionBudines"] .maker-data dl {
-  gap: 0.035cm;
-  margin-top: 0.03cm;
+  gap: 0.8cm;
+  margin-top: 0.12cm;
 }
 
 .labels-stage[data-template="panificacionBudines"] .sale-note {
-  margin-top: 0.04cm;
+  margin-top: 0.8cm;
 }
 
 @media (max-width: 980px) {
