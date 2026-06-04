@@ -800,7 +800,7 @@ select:user-invalid {
 }
 
 .labels-stage[data-template="panificacionOtros"] .nutrition-box {
-  width: 6.8cm;
+  width: calc(var(--label-w) - 0.6cm);
   max-width: 100%;
 }
 
@@ -1126,24 +1126,25 @@ select:user-invalid {
   .app,
   .preview {
     display: block;
+    width: auto;
     padding: 0;
     min-height: 0;
+    overflow: visible;
   }
 
   .labels-stage {
-    display: grid;
-    grid-template-columns: var(--label-w);
-    grid-auto-rows: var(--label-h);
-    gap: 8mm;
-    align-items: start;
-    justify-content: center;
+    display: block;
+    width: var(--label-w);
+    max-width: none;
+    margin: 0 auto;
   }
 
   .label {
+    display: block;
     width: var(--label-w);
     height: var(--label-h);
     transform: none;
-    margin: 0;
+    margin: 0 auto 8mm;
     border: 1.2pt solid #000;
     outline: 1.2pt solid #000;
     outline-offset: -1.2pt;
@@ -1163,6 +1164,10 @@ select:user-invalid {
     border-style: solid;
   }
 
+  .nutrition-table {
+    table-layout: fixed;
+  }
+
   .nutrition-table th,
   .nutrition-table td {
     border-style: solid;
@@ -1179,6 +1184,7 @@ select:user-invalid {
   }
 
   .label:last-child {
+    margin-bottom: 0;
     break-after: auto;
     page-break-after: auto;
   }
