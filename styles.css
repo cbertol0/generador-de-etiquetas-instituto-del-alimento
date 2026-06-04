@@ -1052,7 +1052,7 @@ select:user-invalid {
 
 .labels-stage[data-template="panificacionBudines"] .maker-data {
   gap: 0.04cm;
-  padding-top: 0;
+  padding-top: 0.34cm;
   font-size: calc(0.245cm * var(--back-font-factor));
   line-height: 1.12;
 }
