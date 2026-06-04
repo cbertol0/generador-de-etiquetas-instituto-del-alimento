@@ -33,6 +33,13 @@
           <button class="tab" type="button" data-panel="dorso">Etiqueta dorso</button>
         </div>
 
+        <div class="actions">
+          <button type="button" id="resetBtn">Restaurar ejemplo</button>
+          <button type="button" id="exportDataBtn">Exportar datos</button>
+          <button type="button" id="importDataBtn">Importar datos</button>
+          <input id="importDataInput" type="file" accept="application/json,.json" hidden>
+        </div>
+
         <form class="panel is-active" id="frontal" autocomplete="off">
           <fieldset class="form-group">
             <legend>Tipo de etiqueta</legend>
@@ -129,13 +136,6 @@
             <span class="field-help">Acepta PNG, JPG o JPEG. Recomendado: PNG transparente, ideal 800 x 800 px o mas. Si la imagen es chica o no es cuadrada, se puede ajustar con zoom y recorte.</span>
             <span class="field-error" id="logoError" aria-live="polite"></span>
           </label>
-
-          <div class="actions">
-            <button type="button" id="resetBtn">Restaurar ejemplo</button>
-            <button type="button" id="exportDataBtn">Exportar datos</button>
-            <button type="button" id="importDataBtn">Importar datos</button>
-            <input id="importDataInput" type="file" accept="application/json,.json" hidden>
-          </div>
         </form>
 
         <form class="panel" id="dorso" autocomplete="off">
