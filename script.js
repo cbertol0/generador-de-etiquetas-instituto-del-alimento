@@ -261,6 +261,16 @@ function renderNutrition(state) {
     .join("");
 }
 
+function warnBackOverflow() {
+  const backLabel = document.querySelector(".label-back");
+  const isOverflowing = backLabel.scrollHeight > backLabel.clientHeight + 2 || backLabel.scrollWidth > backLabel.clientWidth + 2;
+  backLabel.classList.toggle("is-overflowing", isOverflowing);
+  if (isOverflowing && !printMessage.textContent) {
+    printMessage.textContent = "El dorso excede el espacio disponible. Reducir texto para evitar cortes.";
+  }
+  return isOverflowing;
+}
+
 function renderOctagons(state) {
   octagonStrip.innerHTML = sealLabels
     .filter(([key]) => state[key])
@@ -350,6 +360,7 @@ function render() {
   renderOctagons(state);
   fitText(document.querySelector(".logo-block strong"), template.logoMax, template.logoMin);
   fitText(document.querySelector(".product-copy h2"), template.productMax, template.productMin);
+  warnBackOverflow();
 }
 
 function escapeHtml(value) {
@@ -523,6 +534,10 @@ function showManufacturerValidation() {
     printMessage.textContent = `Revisar ${fieldLabel(invalidField)}: ${invalidField.validationMessage}`;
     invalidField.focus();
     invalidField.closest("form").reportValidity();
+    return false;
+  }
+  if (warnBackOverflow()) {
+    activatePanel("dorso");
     return false;
   }
   printMessage.textContent = "Datos completos.";

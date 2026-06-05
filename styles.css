@@ -532,6 +532,11 @@ select:user-invalid {
   -webkit-print-color-adjust: exact;
 }
 
+.label.is-overflowing {
+  outline: 0.08cm solid #a7342a;
+  outline-offset: 0.04cm;
+}
+
 @media screen and (min-width: 981px) {
   .preview .label {
     width: var(--label-w);
@@ -674,7 +679,7 @@ select:user-invalid {
 }
 
 .ingredients p {
-  font-size: calc(0.22cm * var(--back-font-factor));
+  font-size: calc(0.16cm * var(--back-font-factor));
   line-height: 1.32;
   overflow-wrap: anywhere;
 }
@@ -684,7 +689,7 @@ select:user-invalid {
 }
 
 .ingredients strong {
-  font-size: calc(0.24cm * var(--back-font-factor));
+  font-size: calc(0.18cm * var(--back-font-factor));
 }
 
 .back-grid {
@@ -1029,16 +1034,16 @@ select:user-invalid {
 }
 
 .labels-stage[data-template="panificacionBudines"] .ingredients p {
-  font-size: calc(0.25cm * var(--back-font-factor));
+  font-size: calc(0.18cm * var(--back-font-factor));
   line-height: 1.08;
 }
 
 .labels-stage[data-template="panificacionBudines"] .ingredients strong {
-  font-size: calc(0.27cm * var(--back-font-factor));
+  font-size: calc(0.2cm * var(--back-font-factor));
 }
 
 .labels-stage[data-template="panificacionBudines"] .back-grid {
-  grid-template-columns: minmax(0, 66%) minmax(0, 1fr);
+  grid-template-columns: minmax(0, 62%) minmax(0, 1fr);
   gap: 0.16cm;
 }
 
@@ -1062,18 +1067,18 @@ select:user-invalid {
 
 .labels-stage[data-template="panificacionBudines"] .maker-data {
   gap: 0.04cm;
-  padding-top: 0.34cm;
+  padding-top: 0.18cm;
   font-size: calc(0.245cm * var(--back-font-factor));
-  line-height: 1.12;
+  line-height: 1.08;
 }
 
 .labels-stage[data-template="panificacionBudines"] .maker-data dl {
-  gap: 0.8cm;
-  margin-top: 0.12cm;
+  gap: 0.38cm;
+  margin-top: 0.08cm;
 }
 
 .labels-stage[data-template="panificacionBudines"] .sale-note {
-  margin-top: 0.8cm;
+  margin-top: 0.32cm;
 }
 
 @media (max-width: 980px) {
