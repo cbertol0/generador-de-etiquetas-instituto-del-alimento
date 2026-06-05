@@ -265,7 +265,8 @@ function renderNutrition(state) {
 
 function warnBackOverflow() {
   const backLabel = document.querySelector(".label-back");
-  const isOverflowing = backLabel.scrollHeight > backLabel.clientHeight + 2 || backLabel.scrollWidth > backLabel.clientWidth + 2;
+  const tolerance = 8;
+  const isOverflowing = backLabel.scrollHeight > backLabel.clientHeight + tolerance || backLabel.scrollWidth > backLabel.clientWidth + tolerance;
   backLabel.classList.toggle("is-overflowing", isOverflowing);
   if (isOverflowing && !printMessage.textContent) {
     printMessage.textContent = "El dorso excede el espacio disponible. Reducir texto para evitar cortes.";

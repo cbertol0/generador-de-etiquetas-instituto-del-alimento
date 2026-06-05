@@ -984,6 +984,7 @@ select:user-invalid {
 }
 
 .labels-stage[data-template="panificacionCookies"] .nutrition-table {
+  font-size: calc(0.19cm * var(--back-font-factor));
   line-height: 0.98;
 }
 
@@ -994,6 +995,7 @@ select:user-invalid {
 }
 
 .labels-stage[data-template="panificacionCookies"] .daily-note {
+  font-size: calc(0.17cm * var(--back-font-factor));
   padding: 0.02cm 0.045cm;
   line-height: 1.03;
 }
@@ -1001,6 +1003,7 @@ select:user-invalid {
 .labels-stage[data-template="panificacionCookies"] .maker-data {
   gap: 0.035cm;
   padding-top: 0;
+  font-size: calc(0.18cm * var(--back-font-factor));
   line-height: 1.08;
 }
 
