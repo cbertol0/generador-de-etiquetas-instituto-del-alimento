@@ -161,6 +161,8 @@ const manufacturerForm = document.querySelector("#dorso");
 const dateFields = document.querySelectorAll("[data-date-mask]");
 const gipField = document.querySelector("input[name='gip']");
 const printMessage = document.querySelector("#printMessage");
+const printBtn = document.querySelector("#printBtn");
+const exportPdfBtn = document.querySelector("#exportPdfBtn");
 const vdDashFields = document.querySelectorAll(".vd-field input[type='checkbox']");
 const cropModal = document.querySelector("#cropModal");
 const cropCanvas = document.querySelector("#cropCanvas");
@@ -544,6 +546,12 @@ function showManufacturerValidation() {
   return true;
 }
 
+function openPrintDialog(message) {
+  if (!showManufacturerValidation()) return;
+  printMessage.textContent = message;
+  window.print();
+}
+
 function drawCropCanvas() {
   if (!cropState.image) return;
   const size = cropCanvas.width;
@@ -746,11 +754,8 @@ exportDataBtn.addEventListener("click", exportLabelData);
 importDataBtn.addEventListener("click", () => importDataInput.click());
 importDataInput.addEventListener("change", (event) => importLabelData(event.target.files[0]));
 
-document.querySelector("#printBtn").addEventListener("click", () => {
-  if (!showManufacturerValidation()) return;
-  printMessage.textContent = "Abriendo impresion...";
-  window.print();
-});
+printBtn.addEventListener("click", () => openPrintDialog("Abriendo impresion..."));
+exportPdfBtn.addEventListener("click", () => openPrintDialog("Abriendo impresion. Elegir Guardar como PDF."));
 
 document.querySelector("#validateManufacturerBtn").addEventListener("click", showManufacturerValidation);
 

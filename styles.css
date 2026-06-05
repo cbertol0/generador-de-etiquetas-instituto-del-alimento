@@ -115,6 +115,13 @@ h1 {
   gap: 6px;
 }
 
+.print-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
 .print-help,
 .print-message {
   max-width: 190px;
@@ -141,6 +148,7 @@ h1 {
 
 .tab,
 .primary,
+.print-buttons button,
 .actions button,
 #validateManufacturerBtn {
   min-height: 40px;

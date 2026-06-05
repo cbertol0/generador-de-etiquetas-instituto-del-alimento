@@ -22,7 +22,10 @@
             <p id="labelSizeHint">Elegir categoria y formato para comenzar</p>
           </div>
           <div class="print-actions">
-            <button class="primary" id="printBtn" type="button">Imprimir etiquetas</button>
+            <span class="print-buttons">
+              <button class="primary" id="printBtn" type="button">Imprimir etiquetas</button>
+              <button id="exportPdfBtn" type="button">Exportar a PDF</button>
+            </span>
             <span class="print-help">Si el navegador bloquea el dialogo, usar Ctrl+P.</span>
             <span class="print-message" id="printMessage" aria-live="polite"></span>
           </div>
@@ -35,8 +38,8 @@
 
         <div class="actions">
           <button type="button" id="resetBtn">Restaurar ejemplo</button>
-          <button type="button" id="exportDataBtn">Exportar datos</button>
           <button type="button" id="importDataBtn">Importar datos</button>
+          <button type="button" id="exportDataBtn">Exportar datos</button>
           <input id="importDataInput" type="file" accept="application/json,.json" hidden>
         </div>
 
