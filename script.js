@@ -547,8 +547,26 @@ function showManufacturerValidation() {
   return true;
 }
 
+function filenamePart(value, fallback, maxLength) {
+  const clean = String(value || fallback)
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-|-$/g, "");
+  return (clean || fallback).slice(0, maxLength).replace(/-$/g, "");
+}
+
+function suggestedPdfTitle() {
+  const state = readState();
+  const maker = filenamePart(state.elaboradoPor, "elaborador", 28);
+  const product = filenamePart(state.producto, "producto", 42);
+  return `${maker}-${product}`;
+}
+
 function openPrintDialog(message) {
   if (!showManufacturerValidation()) return;
+  document.title = suggestedPdfTitle();
   printMessage.textContent = message;
   window.print();
 }
@@ -609,14 +627,9 @@ function applyCrop() {
 }
 
 function exportFilename(state) {
-  const product = String(state.producto || "producto")
-    .toLowerCase()
-    .normalize("NFD")
-    .replace(/[\u0300-\u036f]/g, "")
-    .replace(/[^a-z0-9]+/g, "-")
-    .replace(/^-|-$/g, "")
-    .slice(0, 42) || "producto";
-  return `etiqueta-${product}.json`;
+  const maker = filenamePart(state.elaboradoPor, "elaborador", 28);
+  const product = filenamePart(state.producto, "producto", 42);
+  return `${maker}-${product}.json`;
 }
 
 function exportLabelData() {
