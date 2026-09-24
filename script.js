@@ -3,8 +3,8 @@ const defaults = {
   octagonMode: "provisorio",
   productSurface: "",
   marca: "ALGO DULCE",
-  rubro: "REPOSTERIA",
-  producto: "Alfajor relleno de dulce de leche con bano de producto de reposteria semiamargo",
+  rubro: "REPOSTERÍA",
+  producto: "Alfajor relleno de dulce de leche con baño de producto de repostería semiamargo",
   pesoValor: "120",
   pesoUnidad: "g",
   tenorValor: "23",
@@ -30,7 +30,7 @@ const defaults = {
   proteinasVdValor: "5",
   proteinasVdDash: false,
   grasasTotalesValor: "10",
-  grasasTotalesVdValor: "19",
+  grasasTotalesVdValor: "18",
   grasasTotalesVdDash: false,
   grasasSaturadasValor: "5.4",
   grasasSaturadasVdValor: "25",
@@ -44,10 +44,10 @@ const defaults = {
   sodioValor: "120",
   sodioVdValor: "5",
   sodioVdDash: false,
-  ingredientes: "Harina de trigo 0000 enriquecida segun Ley 25630 (hierro: 30 mg/kg, acido folico: 2.2 mg/kg, tiamina (B1): 6.3 mg/kg, riboflavina (B2): 1.3 mg/kg, niacina: 13 mg/kg), manteca, azucar rubio, avena, huevo, azucar, almidon de maiz, bicarbonato de sodio, sal, canela molida.",
+  ingredientes: "Harina de trigo 0000 enriquecida según Ley 25630 (hierro: 30 mg/kg, ácido fólico: 2,2 mg/kg, tiamina (B1): 6,3 mg/kg, riboflavina (B2): 1,3 mg/kg, niacina: 13 mg/kg), manteca, azúcar rubio, avena, huevo, azúcar, almidón de maíz, bicarbonato de sodio, sal, canela molida.",
   alergenos: "CONTIENE AVENA, HUEVO, SULFITOS Y DERIVADOS DE TRIGO Y LECHE.",
-  elaboradoPor: "Jaquelina Pecora - Jorgito",
-  domicilio: "1912 - Rosario - Sta Fe",
+  elaboradoPor: "Nombre del elaborador",
+  domicilio: "Calle 1234 - Rosario - Santa Fe",
   gip: "1267/2025-01",
   conservacion: "Conservar en lugar fresco y seco",
   fechaElaboracion: "",
@@ -61,29 +61,29 @@ const defaults = {
 };
 
 const nutritionLabels = [
-  ["energia", "energiaVd", "Valor energetico"],
+  ["energia", "energiaVd", "Valor energético"],
   ["carbohidratos", "carbohidratosVd", "Carbohidratos"],
-  ["azucares", "azucaresVd", "Azucares Totales"],
-  ["azucaresAnadidos", "azucaresAnadidosVd", "Azucares Anadidos"],
-  ["proteinas", "proteinasVd", "Proteinas"],
-  ["grasasTotales", "grasasTotalesVd", "Grasas Totales"],
-  ["grasasSaturadas", "grasasSaturadasVd", "Grasas Saturadas"],
-  ["grasasTrans", "grasasTransVd", "Grasas Trans"],
-  ["fibra", "fibraVd", "Fibra Alimentaria"],
+  ["azucares", "azucaresVd", "Azúcares totales"],
+  ["azucaresAnadidos", "azucaresAnadidosVd", "Azúcares añadidos"],
+  ["proteinas", "proteinasVd", "Proteínas"],
+  ["grasasTotales", "grasasTotalesVd", "Grasas totales"],
+  ["grasasSaturadas", "grasasSaturadasVd", "Grasas saturadas"],
+  ["grasasTrans", "grasasTransVd", "Grasas trans"],
+  ["fibra", "fibraVd", "Fibra alimentaria"],
   ["sodio", "sodioVd", "Sodio"]
 ];
 
 const sealLabels = [
-  ["excesoAzucares", "Exceso en azucares", "octogono-excesoenazucares.png"],
+  ["excesoAzucares", "Exceso en azúcares", "octogono-excesoenazucares.png"],
   ["excesoGrasasTotales", "Exceso en grasas totales", "octogono-excesoengrasastotales.png"],
   ["excesoGrasasSaturadas", "Exceso en grasas saturadas", "octogono-excesoengrasassaturadas.png"],
   ["excesoSodio", "Exceso en sodio", "octogono-excesoensodio.png"],
-  ["excesoCalorias", "Exceso en calorias", "octogono-excesoencalorias.png"]
+  ["excesoCalorias", "Exceso en calorías", "octogono-excesoencalorias.png"]
 ];
 
 const labelTemplates = {
   frasco: {
-    hint: "Frente y dorso - Frascos - 6 cm x 7 cm",
+    hint: "Frascos · 6 × 7 cm",
     widthCm: 6,
     heightCm: 7,
     provisionalOctagonCm: 0.78,
@@ -93,7 +93,7 @@ const labelTemplates = {
     productMin: 0.16
   },
   panificacionOtros: {
-    hint: "Frente y dorso - Panificacion / Otros - 10 cm x 10 cm",
+    hint: "Panificación / Otros · 10 × 10 cm",
     widthCm: 10,
     heightCm: 10,
     provisionalOctagonCm: 1.15,
@@ -103,7 +103,7 @@ const labelTemplates = {
     productMin: 0.2
   },
   panificacionBudines: {
-    hint: "Frente y dorso - Panificacion / Budines - 10 cm x 5 cm",
+    hint: "Panificación / Budines · 10 × 5 cm",
     widthCm: 10,
     heightCm: 5,
     provisionalOctagonCm: 0.85,
@@ -113,7 +113,7 @@ const labelTemplates = {
     productMin: 0.16
   },
   panificacionCookies: {
-    hint: "Frente y dorso - Panificacion / Cookies - 7 cm x 7 cm",
+    hint: "Panificación / Cookies · 7 × 7 cm",
     widthCm: 7,
     heightCm: 7,
     provisionalOctagonCm: 0.72,
@@ -162,7 +162,7 @@ const dateFields = document.querySelectorAll("[data-date-mask]");
 const gipField = document.querySelector("input[name='gip']");
 const printMessage = document.querySelector("#printMessage");
 const printBtn = document.querySelector("#printBtn");
-const exportPdfBtn = document.querySelector("#exportPdfBtn");
+const calcVdBtn = document.querySelector("#calcVdBtn");
 const vdDashFields = document.querySelectorAll(".vd-field input[type='checkbox']");
 const cropModal = document.querySelector("#cropModal");
 const cropCanvas = document.querySelector("#cropCanvas");
@@ -187,6 +187,11 @@ const cropState = {
   startImageY: 0
 };
 
+function setMessage(text, tone = "error") {
+  printMessage.textContent = text;
+  printMessage.dataset.tone = text ? tone : "";
+}
+
 function displayNumber(value) {
   return String(value || "").replace(".", ",");
 }
@@ -204,8 +209,8 @@ function readState() {
     currentState[field.name] = field.type === "checkbox" ? field.checked : field.value;
     return currentState;
   }, {});
-  state.peso = state.pesoValor ? `${state.pesoValor} ${state.pesoUnidad || ""}`.trim() : "";
-  state.tenor = state.tenorValor ? `${state.tenorValor}%` : "";
+  state.peso = state.pesoValor ? `${displayNumber(state.pesoValor)} ${state.pesoUnidad || ""}`.trim() : "";
+  state.tenor = state.tenorValor ? `${displayNumber(state.tenorValor)}%` : "";
   state.energia = state.energiaKcal || state.energiaKj ? `${displayNumber(state.energiaKcal)} kcal = ${displayNumber(state.energiaKj)} kJ` : "";
   state.energiaVd = dailyValue(state, "energia");
   state.carbohidratos = nutrientValue(state, "carbohidratos", "g");
@@ -263,15 +268,26 @@ function renderNutrition(state) {
     .join("");
 }
 
-function warnBackOverflow() {
+function overflows(element, tolerance = 8) {
+  return element.scrollHeight > element.clientHeight + tolerance || element.scrollWidth > element.clientWidth + tolerance;
+}
+
+function checkLabelOverflow() {
+  const frontLabel = document.querySelector(".label-front");
+  const frontBody = document.querySelector(".front-body");
   const backLabel = document.querySelector(".label-back");
-  const tolerance = 8;
-  const isOverflowing = backLabel.scrollHeight > backLabel.clientHeight + tolerance || backLabel.scrollWidth > backLabel.clientWidth + tolerance;
-  backLabel.classList.toggle("is-overflowing", isOverflowing);
-  if (isOverflowing && !printMessage.textContent) {
-    printMessage.textContent = "El dorso excede el espacio disponible. Reducir texto para evitar cortes.";
+  const frontOverflow = frontBody.scrollHeight > frontBody.clientHeight + 4 || frontBody.clientHeight < frontLabel.clientHeight * 0.35;
+  const backOverflow = overflows(backLabel);
+  frontLabel.classList.toggle("is-overflowing", frontOverflow);
+  backLabel.classList.toggle("is-overflowing", backOverflow);
+  if (!printMessage.textContent) {
+    if (frontOverflow) {
+      setMessage("El frente no tiene lugar suficiente: los octógonos ocupan demasiado o el texto es largo. Revisar formato o superficie.");
+    } else if (backOverflow) {
+      setMessage("El dorso excede el espacio disponible. Reducir texto para evitar cortes.");
+    }
   }
-  return isOverflowing;
+  return { front: frontOverflow, back: backOverflow };
 }
 
 function renderOctagons(state) {
@@ -347,11 +363,11 @@ function render() {
   stage.dataset.template = state.labelTemplate || "panificacionOtros";
   const octagonMetrics = applyOctagonSizing(state, template);
   const normativeHint = octagonMetrics.mode === "normativo"
-    ? `Superficie envase ${displayNumber(octagonMetrics.productSurface)} cm2 - ${octagonMetrics.usesAds ? `ADS ${displayNumber(octagonMetrics.referenceArea)} cm2 - ` : ""}Octogonos ${displayNumber(octagonMetrics.size)} cm`
-    : `Octogonos provisorios ${displayNumber(octagonMetrics.size)} cm`;
+    ? `Superficie del envase ${displayNumber(octagonMetrics.productSurface)} cm² · ${octagonMetrics.usesAds ? `ADS ${displayNumber(octagonMetrics.referenceArea)} cm² · ` : ""}Octógonos de ${displayNumber(octagonMetrics.size)} cm`
+    : `Octógonos provisorios de ${displayNumber(octagonMetrics.size)} cm`;
   labelSizeHint.textContent = state.labelTemplate
-    ? `${template.hint} - ${normativeHint}`
-    : "Elegir categoria y formato para comenzar";
+    ? `${template.hint} · ${normativeHint}`
+    : "Elegir categoría y formato para comenzar";
   syncSurfaceField(state);
   document.querySelectorAll("[data-bind]").forEach((node) => {
     node.textContent = state[node.dataset.bind] || "";
@@ -363,7 +379,7 @@ function render() {
   renderOctagons(state);
   fitText(document.querySelector(".logo-block strong"), template.logoMax, template.logoMin);
   fitText(document.querySelector(".product-copy h2"), template.productMax, template.productMin);
-  warnBackOverflow();
+  checkLabelOverflow();
 }
 
 function escapeHtml(value) {
@@ -375,8 +391,12 @@ function escapeHtml(value) {
 }
 
 function activatePanel(panelId) {
+  const tab = document.querySelector(`.tab[data-panel="${panelId}"]`);
+  if (!tab) return;
   document.querySelectorAll(".tab, .panel").forEach((el) => el.classList.remove("is-active"));
-  document.querySelector(`.tab[data-panel="${panelId}"]`).classList.add("is-active");
+  document.querySelectorAll(".tab").forEach((el) => el.setAttribute("aria-selected", "false"));
+  tab.classList.add("is-active");
+  tab.setAttribute("aria-selected", "true");
   document.querySelector(`#${panelId}`).classList.add("is-active");
 }
 
@@ -386,7 +406,7 @@ document.querySelectorAll(".tab").forEach((tab) => {
 
 forms.forEach((form) => {
   const handleFormUpdate = () => {
-    printMessage.textContent = "";
+    setMessage("");
     validateLabelTemplateField();
     validateProductSurfaceField();
     syncAllergensField();
@@ -437,13 +457,13 @@ function validateDateField(field) {
   if (!field.value) {
     field.setCustomValidity("");
   } else if (day.length === 2 && (Number(day) < 1 || Number(day) > 31)) {
-    field.setCustomValidity("El dia debe estar entre 01 y 31.");
+    field.setCustomValidity("El día debe estar entre 01 y 31.");
   } else if (month.length === 2 && (Number(month) < 1 || Number(month) > 12)) {
     field.setCustomValidity("El mes debe estar entre 01 y 12.");
   } else if (year.length === 4 && (Number(year) < min || Number(year) > max)) {
-    field.setCustomValidity(`El ano debe estar entre ${min} y ${max}.`);
+    field.setCustomValidity(`El año debe estar entre ${min} y ${max}.`);
   } else if (!isValidDate(field.value, field)) {
-    field.setCustomValidity("Usar una fecha valida en formato dd/mm/aaaa.");
+    field.setCustomValidity("Usar una fecha válida en formato dd/mm/aaaa.");
   } else {
     field.setCustomValidity("");
   }
@@ -455,7 +475,7 @@ function validateDateRange() {
   const elaboracionDate = parseDate(elaboracion.value, elaboracion);
   const vencimientoDate = parseDate(vencimiento.value, vencimiento);
   if (elaboracionDate && vencimientoDate && vencimientoDate < elaboracionDate) {
-    vencimiento.setCustomValidity("La fecha de vencimiento no puede ser anterior a la fecha de elaboracion.");
+    vencimiento.setCustomValidity("La fecha de vencimiento no puede ser anterior a la fecha de elaboración.");
   }
 }
 
@@ -479,7 +499,7 @@ function validateGipField() {
 
 function validateLabelTemplateField() {
   if (!labelTemplateField.value) {
-    labelTemplateField.setCustomValidity("Elegir que tipo de etiqueta se va a armar.");
+    labelTemplateField.setCustomValidity("Elegir qué tipo de etiqueta se va a armar.");
   } else {
     labelTemplateField.setCustomValidity("");
   }
@@ -504,7 +524,7 @@ function validateProductSurfaceField() {
 function syncAllergensField() {
   allergensField.value = allergensField.value.toUpperCase();
   if (!allergensField.value.trim()) {
-    allergensField.setCustomValidity("Completar los alergenos en mayusculas.");
+    allergensField.setCustomValidity("Completar los alérgenos.");
   } else {
     allergensField.setCustomValidity("");
   }
@@ -534,17 +554,52 @@ function showManufacturerValidation() {
   const invalidField = firstInvalidManufacturerField();
   if (invalidField) {
     activatePanel(invalidField.closest("form").id);
-    printMessage.textContent = `Revisar ${fieldLabel(invalidField)}: ${invalidField.validationMessage}`;
-    invalidField.focus();
-    invalidField.closest("form").reportValidity();
+    setMessage(`Revisar «${fieldLabel(invalidField)}»: ${invalidField.validationMessage}`);
+    invalidField.scrollIntoView({ block: "center", behavior: "smooth" });
+    invalidField.focus({ preventScroll: true });
+    invalidField.reportValidity();
     return false;
   }
-  if (warnBackOverflow()) {
-    activatePanel("dorso");
+  setMessage("");
+  const overflow = checkLabelOverflow();
+  if (overflow.front || overflow.back) {
+    activatePanel(overflow.front ? "frontal" : "dorso");
     return false;
   }
-  printMessage.textContent = "Datos completos.";
+  setMessage("Datos completos. Listo para imprimir.", "ok");
   return true;
+}
+
+const dailyReference = {
+  energia: 2000,
+  carbohidratos: 300,
+  proteinas: 75,
+  grasasTotales: 55,
+  grasasSaturadas: 22,
+  fibra: 25,
+  sodio: 2400
+};
+
+function setField(name, value) {
+  const field = document.querySelector(`[name='${name}']`);
+  if (field) field.value = value;
+}
+
+function calculateDailyValues() {
+  const state = readState();
+  const kcal = Number(state.energiaKcal);
+  if (state.energiaKcal !== "" && Number.isFinite(kcal)) {
+    setField("energiaKj", Math.round(kcal * 4.2));
+  }
+  Object.entries(dailyReference).forEach(([key, reference]) => {
+    if (state[`${key}VdDash`]) return;
+    const amount = Number(key === "energia" ? state.energiaKcal : state[`${key}Valor`]);
+    if (!Number.isFinite(amount)) return;
+    setField(`${key}VdValor`, Math.round((amount / reference) * 100));
+  });
+  syncDailyValueControls();
+  render();
+  setMessage("kJ y %VD recalculados. Revisar antes de imprimir.", "ok");
 }
 
 function filenamePart(value, fallback, maxLength) {
@@ -566,9 +621,11 @@ function suggestedPdfTitle() {
 
 function openPrintDialog(message) {
   if (!showManufacturerValidation()) return;
+  const originalTitle = document.title;
   document.title = suggestedPdfTitle();
-  printMessage.textContent = message;
+  setMessage(message, "ok");
   window.print();
+  document.title = originalTitle;
 }
 
 function drawCropCanvas() {
@@ -587,8 +644,6 @@ function drawCropCanvas() {
     cropState.y = Math.min(0, Math.max(size - drawHeight, cropState.y));
   }
   cropContext.clearRect(0, 0, size, size);
-  cropContext.fillStyle = "#f4f6f6";
-  cropContext.fillRect(0, 0, size, size);
   cropContext.drawImage(cropState.image, cropState.x, cropState.y, drawWidth, drawHeight);
 }
 
@@ -648,13 +703,13 @@ function exportLabelData() {
   link.click();
   link.remove();
   URL.revokeObjectURL(link.href);
-  printMessage.textContent = "Datos exportados.";
+  setMessage("Datos guardados en un archivo .json.", "ok");
 }
 
 function applyImportedData(payload) {
   const importedFields = payload?.fields || payload;
   if (!importedFields || typeof importedFields !== "object") {
-    throw new Error("Archivo invalido.");
+    throw new Error("Archivo inválido.");
   }
   writeState({ ...defaults, ...importedFields });
   if (payload.logoSrc && typeof payload.logoSrc === "string" && payload.logoSrc.startsWith("data:image/")) {
@@ -673,7 +728,7 @@ function applyImportedData(payload) {
   syncAllergensField();
   validateGipField();
   render();
-  printMessage.textContent = "Datos importados.";
+  setMessage("Datos cargados.", "ok");
 }
 
 function importLabelData(file) {
@@ -683,7 +738,7 @@ function importLabelData(file) {
     try {
       applyImportedData(JSON.parse(reader.result));
     } catch (error) {
-      printMessage.textContent = "No se pudo importar el archivo JSON.";
+      setMessage("No se pudo abrir el archivo. Tiene que ser un .json guardado con este generador.");
     } finally {
       importDataInput.value = "";
     }
@@ -705,6 +760,8 @@ dateFields.forEach((field) => {
 
 gipField.addEventListener("input", () => {
   validateGipField();
+  activatePanel("frontal");
+  setMessage("");
   render();
 });
 gipField.addEventListener("blur", validateGipField);
@@ -768,12 +825,13 @@ exportDataBtn.addEventListener("click", exportLabelData);
 importDataBtn.addEventListener("click", () => importDataInput.click());
 importDataInput.addEventListener("change", (event) => importLabelData(event.target.files[0]));
 
-printBtn.addEventListener("click", () => openPrintDialog("Abriendo impresion..."));
-exportPdfBtn.addEventListener("click", () => openPrintDialog("Abriendo impresion. Elegir Guardar como PDF."));
+printBtn.addEventListener("click", () => openPrintDialog("Para PDF, elegir «Guardar como PDF» en el destino de impresión."));
+calcVdBtn.addEventListener("click", calculateDailyValues);
 
 document.querySelector("#validateManufacturerBtn").addEventListener("click", showManufacturerValidation);
 
 document.querySelector("#resetBtn").addEventListener("click", () => {
+  if (!window.confirm("¿Restaurar el ejemplo? Se reemplazan todos los datos cargados. Si los necesitás, primero usá «Guardar datos».")) return;
   writeState(defaults);
   logo.src = "assets/foto-de-producto.webp";
   logoInput.value = "";
@@ -785,6 +843,8 @@ document.querySelector("#resetBtn").addEventListener("click", () => {
   validateProductSurfaceField();
   syncAllergensField();
   validateGipField();
+  activatePanel("frontal");
+  setMessage("");
   render();
 });
 

@@ -20,7 +20,9 @@ El usuario debe elegir obligatoriamente el tipo de etiqueta antes de validar o i
 - Validacion opcional de fechas si el usuario las completa.
 - Validacion del GIP con formato `1267/2025-01`.
 - Exportacion e importacion de datos completos en JSON para reutilizar productos, fabricantes y configuraciones.
-- Impresion siempre de frente y dorso.
+- Boton "Calcular kJ y %VD": calcula kJ (1 kcal = 4,2 kJ) y el %VD sobre una dieta de 2.000 kcal (energia 2000 kcal, carbohidratos 300 g, proteinas 75 g, grasas totales 55 g, grasas saturadas 22 g, fibra 25 g, sodio 2400 mg). Respeta las filas marcadas "Sin %VD".
+- Aviso si el frente o el dorso no tienen lugar suficiente (por ejemplo, octogonos normativos grandes en una etiqueta chica).
+- Impresion siempre de frente y dorso. El PDF se genera desde el dialogo de impresion ("Guardar como PDF").
 - Octogonos oficiales en PNG dentro de `assets/`.
 
 ## Octogonos
