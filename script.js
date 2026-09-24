@@ -12,7 +12,6 @@ const defaults = {
   instagram: "@algodulce.2431",
   facebook: "",
   porcion: "50 g (1 unidad)",
-  porciones: "1",
   energiaKcal: "233",
   energiaKj: "976",
   energiaVdValor: "12",
