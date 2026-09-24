@@ -815,9 +815,19 @@ select:user-invalid {
   padding: 0.34cm;
 }
 
+.labels-stage[data-template="panificacionOtros"] .label-back {
+  padding-top: 0.22cm;
+  padding-bottom: 0.2cm;
+  gap: 0.14cm;
+}
+
+.labels-stage[data-template="panificacionOtros"] .ingredients p {
+  line-height: 1.22;
+}
+
 .labels-stage[data-template="panificacionOtros"] .back-grid {
   grid-template-columns: 1fr;
-  gap: 0.24cm;
+  gap: 0.14cm;
   justify-items: center;
 }
 
@@ -831,7 +841,7 @@ select:user-invalid {
   max-width: 100%;
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 0.14cm 0.35cm;
+  gap: 0.07cm 0.35cm;
   padding-top: 0;
 }
 
