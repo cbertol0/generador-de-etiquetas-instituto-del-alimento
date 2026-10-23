@@ -1,5 +1,6 @@
 // Versión visible en el pie de página. Actualizar en cada cambio publicado.
-const APP_VERSION = "2.2";
+const APP_VERSION = "2.3";
+const APP_AUTHOR = "Claudio Bertolin";
 const APP_UPDATED = "23/10/2026";
 
 const defaults = {
@@ -1044,7 +1045,7 @@ document.querySelector("#resetBtn").addEventListener("click", () => {
   render();
 });
 
-document.querySelector("#appVersion").textContent = `Versión ${APP_VERSION} · actualizada el ${APP_UPDATED}`;
+document.querySelector("#appVersion").textContent = `Versión ${APP_VERSION} · actualizada el ${APP_UPDATED} · Diseño y desarrollo: ${APP_AUTHOR}`;
 
 stage.dataset.template = "panificacionOtros";
 writeState(defaults);

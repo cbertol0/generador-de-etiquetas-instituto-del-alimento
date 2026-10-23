@@ -52,3 +52,9 @@ La superficie normativa corresponde al envase/producto final, no al area de la e
 5. Abrir la URL publicada por GitHub Pages.
 
 No requiere login, servidor, base de datos ni instalacion de dependencias.
+
+## Autor
+
+Diseño y desarrollo: Claudio Bertolin (Instituto del Alimento, Rosario).
+
+Licencia: Creative Commons BY-NC-ND 4.0 (ver archivo `license`).
