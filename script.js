@@ -1,5 +1,5 @@
 // Versión visible en el pie de página. Actualizar en cada cambio publicado.
-const APP_VERSION = "2.3";
+const APP_VERSION = "2.4";
 const APP_AUTHOR = "Claudio Bertolin";
 const APP_UPDATED = "23/10/2026";
 
@@ -664,9 +664,13 @@ function gipBaseOf(product) {
 
 function renumberGip() {
   const start = Math.min(99, Math.max(1, Number(gipStartField.value) || 1));
-  products.forEach((product, index) => {
+  // Cada elaborador (base del GIP) se numera por separado, en el orden de la lista.
+  const counters = {};
+  products.forEach((product) => {
     const base = gipBaseOf(product);
-    if (base) product.fields.gip = `${base}-${pad2(Math.min(99, start + index))}`;
+    if (!base) return;
+    counters[base] = (counters[base] ?? -1) + 1;
+    product.fields.gip = `${base}-${pad2(Math.min(99, start + counters[base]))}`;
   });
   if (currentProduct >= 0) {
     gipField.value = products[currentProduct].fields.gip || "";
@@ -738,7 +742,10 @@ function loadProduct(index) {
 }
 
 async function importFormPdfs(fileList) {
-  const files = [...fileList].filter((file) => /\.pdf$/i.test(file.name) || file.type === "application/pdf");
+  // Se ordenan por nombre de archivo: así el orden de los productos (y del GIP) es predecible.
+  const files = [...fileList]
+    .filter((file) => /\.pdf$/i.test(file.name) || file.type === "application/pdf")
+    .sort((a, b) => a.name.localeCompare(b.name, "es", { numeric: true, sensitivity: "base" }));
   if (!files.length) return;
   importPdfBtn.setAttribute("aria-busy", "true");
   importPdfBtn.disabled = true;
@@ -765,6 +772,10 @@ async function importFormPdfs(fileList) {
     }
     activatePanel("frontal");
     loadProduct(0);
+    const bases = [...new Set(products.map(gipBaseOf).filter(Boolean))];
+    if (bases.length > 1) {
+      setImportStatus(`Se cargaron productos de ${bases.length} elaboradores distintos (GIP ${listJoin(bases)}). Cada uno se numera por separado, pero el logo es uno solo para todos: conviene cargar un elaborador por vez.`, "warn");
+    }
   } catch (error) {
     console.error(error);
     setImportStatus("No se pudo leer el PDF. Probá de nuevo o cargá los datos a mano.", "error");

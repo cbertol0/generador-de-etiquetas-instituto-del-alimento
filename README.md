@@ -29,7 +29,7 @@ El usuario debe elegir obligatoriamente el tipo de etiqueta antes de validar o i
 
 El boton "Elegir PDF" lee el formulario del Instituto (folio con los datos del rotulo y folio con la informacion nutricional, Modelo vertical A) y completa todos los campos. Se pueden elegir uno o varios PDF; cada folio de datos se carga como un producto.
 
-- El final del GIP se numera solo segun el orden de los productos (-01, -02, -03...). El campo "N.º del primer producto" permite empezar desde otro numero.
+- Con varios PDF, los productos se ordenan por nombre de archivo (conviene nombrarlos "1 - ...", "2 - ..."). El final del GIP se numera solo en ese orden (-01, -02, -03...), por separado para cada elaborador. El campo "N.º del primer producto" permite empezar desde otro numero.
 - Despues de importar falta subir el logo (se comparte entre todos los productos) y tildar los octogonos.
 - El PDF tiene que tener texto (generado desde Excel); un PDF escaneado no se puede leer.
 - La lectura usa pdf.js (Mozilla, Apache 2.0), incluido en `assets/vendor/pdfjs/`. Todo se procesa en el navegador: el PDF no se sube a ningun servidor.
