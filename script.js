@@ -1,5 +1,5 @@
 // Versión visible en el pie de página. Actualizar en cada cambio publicado.
-const APP_VERSION = "2.1";
+const APP_VERSION = "2.2";
 const APP_UPDATED = "23/10/2026";
 
 const defaults = {
@@ -563,6 +563,12 @@ function showManufacturerValidation() {
     invalidField.reportValidity();
     return false;
   }
+  if (logo.src === LOGO_PLACEHOLDER) {
+    activatePanel("frontal");
+    setMessage("Falta subir el logo del elaborador (Frente › Logo y redes).");
+    logoInput.closest("label").scrollIntoView({ block: "center", behavior: "smooth" });
+    return false;
+  }
   setMessage("");
   const overflow = checkLabelOverflow();
   if (overflow.front || overflow.back) {
@@ -603,6 +609,176 @@ function calculateDailyValues() {
   syncDailyValueControls();
   render();
   setMessage("kJ y %VD recalculados. Revisar antes de imprimir.", "ok");
+}
+
+// ---------- Importar formulario PDF (uno o varios productos) ----------
+
+const importPdfBtn = document.querySelector("#importPdfBtn");
+const importPdfInput = document.querySelector("#importPdfInput");
+const importStatus = document.querySelector("#importStatus");
+const productList = document.querySelector("#productList");
+const productListTitle = document.querySelector("#productListTitle");
+const productChips = document.querySelector("#productChips");
+const gipStartField = document.querySelector("#gipStart");
+const LOGO_PLACEHOLDER = "data:image/svg+xml;charset=utf-8," + encodeURIComponent(
+  '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200"><rect x="4" y="4" width="192" height="192" rx="12" fill="#f4f6f8" stroke="#9aa5b1" stroke-width="4" stroke-dasharray="14 10"/><text x="100" y="96" text-anchor="middle" font-family="Arial" font-size="26" font-weight="700" fill="#6b7680">FALTA</text><text x="100" y="128" text-anchor="middle" font-family="Arial" font-size="26" font-weight="700" fill="#6b7680">LOGO</text></svg>'
+);
+const BRAND_FIELDS = ["instagram", "facebook"];
+let products = [];
+let currentProduct = -1;
+
+function setImportStatus(text, tone = "ok") {
+  importStatus.textContent = text;
+  importStatus.dataset.tone = tone;
+}
+
+function blankFields() {
+  const blank = {};
+  Object.entries(defaults).forEach(([key, value]) => {
+    blank[key] = typeof value === "boolean" ? false : "";
+  });
+  blank.labelTemplate = labelTemplateField.value;
+  blank.octagonMode = octagonModeField.value;
+  blank.productSurface = productSurfaceField.value;
+  blank.pesoUnidad = "g";
+  return blank;
+}
+
+function revalidateAll() {
+  syncDailyValueControls();
+  dateFields.forEach(validateDateField);
+  validateDateRange();
+  validateLabelTemplateField();
+  validateProductSurfaceField();
+  syncAllergensField();
+  validateGipField();
+}
+
+const pad2 = (number) => String(number).padStart(2, "0");
+
+function gipBaseOf(product) {
+  const fromField = String(product.fields.gip || "").split("-")[0];
+  return /^\d{4}\/\d{4}$/.test(fromField) ? fromField : product.fields.gipBase || "";
+}
+
+function renumberGip() {
+  const start = Math.min(99, Math.max(1, Number(gipStartField.value) || 1));
+  products.forEach((product, index) => {
+    const base = gipBaseOf(product);
+    if (base) product.fields.gip = `${base}-${pad2(Math.min(99, start + index))}`;
+  });
+  if (currentProduct >= 0) {
+    gipField.value = products[currentProduct].fields.gip || "";
+    validateGipField();
+    render();
+  }
+  renderProductChips();
+}
+
+// Actualiza las fichas en el lugar (sin reemplazarlas) para no perder clics en curso.
+function renderProductChips() {
+  productList.hidden = products.length === 0;
+  productListTitle.textContent = products.length === 1 ? "1 producto cargado" : `${products.length} productos cargados`;
+  while (productChips.children.length > products.length) productChips.lastElementChild.remove();
+  while (productChips.children.length < products.length) {
+    const chip = document.createElement("button");
+    chip.type = "button";
+    chip.className = "product-chip";
+    chip.setAttribute("role", "tab");
+    chip.innerHTML = '<span class="chip-num"></span><span class="chip-name"></span><span class="chip-warn" title="Hay datos para revisar">● revisar</span>';
+    productChips.appendChild(chip);
+  }
+  products.forEach((product, index) => {
+    const chip = productChips.children[index];
+    const suffix = String(product.fields.gip || "").split("-")[1] || pad2(index + 1);
+    const name = product.fields.producto || `Producto ${index + 1}`;
+    chip.dataset.index = index;
+    chip.classList.toggle("is-active", index === currentProduct);
+    chip.setAttribute("aria-selected", String(index === currentProduct));
+    chip.title = name;
+    chip.querySelector(".chip-num").textContent = suffix;
+    chip.querySelector(".chip-name").textContent = name;
+    chip.querySelector(".chip-warn").hidden = product.warnings.length === 0;
+  });
+}
+
+function saveCurrentProduct() {
+  if (currentProduct < 0 || !products[currentProduct]) return;
+  products[currentProduct].fields = { ...products[currentProduct].fields, ...readState() };
+}
+
+const listJoin = (items) => (items.length > 1 ? `${items.slice(0, -1).join(", ")} y ${items[items.length - 1]}` : items[0] || "");
+
+function productStatus(product) {
+  const pending = ["subir el logo", "tildar los octógonos"];
+  if (!labelTemplateField.value) pending.push("elegir el formato");
+  if (product.warnings.length) {
+    return { text: `No se encontró en el PDF: ${product.warnings.join(", ")}. Completalo a mano. Además falta ${listJoin(pending)}.`, tone: "warn" };
+  }
+  return { text: `Datos cargados del PDF. Falta ${listJoin(pending)}.`, tone: "ok" };
+}
+
+function loadProduct(index) {
+  if (!products[index]) return;
+  saveCurrentProduct();
+  const brand = currentProduct >= 0 ? Object.fromEntries(BRAND_FIELDS.map((key) => [key, readState()[key]])) : {};
+  currentProduct = index;
+  const product = products[index];
+  BRAND_FIELDS.forEach((key) => {
+    if (!product.fields[key] && brand[key]) product.fields[key] = brand[key];
+  });
+  writeState({ ...blankFields(), ...product.fields });
+  revalidateAll();
+  setMessage("");
+  render();
+  renderProductChips();
+  const status = productStatus(product);
+  setImportStatus(status.text, status.tone);
+}
+
+async function importFormPdfs(fileList) {
+  const files = [...fileList].filter((file) => /\.pdf$/i.test(file.name) || file.type === "application/pdf");
+  if (!files.length) return;
+  importPdfBtn.setAttribute("aria-busy", "true");
+  importPdfBtn.disabled = true;
+  setImportStatus("Leyendo el PDF…", "ok");
+  try {
+    const parsed = await window.ImportadorPdf.importPdfFiles(files);
+    if (!parsed.length) {
+      setImportStatus("No se encontró el formulario del rótulo en el PDF. Tiene que ser el formulario del Instituto generado con texto (no escaneado ni foto).", "error");
+      return;
+    }
+    const brand = Object.fromEntries(BRAND_FIELDS.map((key) => [key, readState()[key]]));
+    const keepBrand = products.length > 0;
+    products = parsed.map((item) => ({
+      fields: { ...blankFields(), ...(keepBrand ? brand : {}), ...item.fields },
+      warnings: item.warnings
+    }));
+    const firstSuffix = Number(products[0].fields.gipSufijo);
+    gipStartField.value = firstSuffix >= 1 && firstSuffix <= 99 ? firstSuffix : 1;
+    currentProduct = -1;
+    renumberGip();
+    if (logo.src.endsWith("assets/foto-de-producto.webp")) {
+      logo.src = LOGO_PLACEHOLDER;
+      logoFileName.textContent = "Falta subir el logo";
+    }
+    activatePanel("frontal");
+    loadProduct(0);
+  } catch (error) {
+    console.error(error);
+    setImportStatus("No se pudo leer el PDF. Probá de nuevo o cargá los datos a mano.", "error");
+  } finally {
+    importPdfBtn.removeAttribute("aria-busy");
+    importPdfBtn.disabled = false;
+    importPdfInput.value = "";
+  }
+}
+
+function clearProducts() {
+  products = [];
+  currentProduct = -1;
+  renderProductChips();
+  setImportStatus("", "ok");
 }
 
 function filenamePart(value, fallback, maxLength) {
@@ -714,6 +890,7 @@ function applyImportedData(payload) {
   if (!importedFields || typeof importedFields !== "object") {
     throw new Error("Archivo inválido.");
   }
+  clearProducts();
   writeState({ ...defaults, ...importedFields });
   if (payload.logoSrc && typeof payload.logoSrc === "string" && payload.logoSrc.startsWith("data:image/")) {
     logo.src = payload.logoSrc;
@@ -828,11 +1005,29 @@ importDataInput.addEventListener("change", (event) => importLabelData(event.targ
 
 printBtn.addEventListener("click", () => openPrintDialog("Para PDF, elegir «Guardar como PDF» en el destino de impresión."));
 calcVdBtn.addEventListener("click", calculateDailyValues);
+importPdfBtn.addEventListener("click", () => importPdfInput.click());
+importPdfInput.addEventListener("change", (event) => importFormPdfs(event.target.files));
+productChips.addEventListener("click", (event) => {
+  const chip = event.target.closest(".product-chip");
+  if (chip) loadProduct(Number(chip.dataset.index));
+});
+forms.forEach((form) => {
+  form.addEventListener("input", () => {
+    if (currentProduct < 0) return;
+    saveCurrentProduct();
+    renderProductChips();
+  });
+});
+gipStartField.addEventListener("change", () => {
+  saveCurrentProduct();
+  renumberGip();
+});
 
 document.querySelector("#validateManufacturerBtn").addEventListener("click", showManufacturerValidation);
 
 document.querySelector("#resetBtn").addEventListener("click", () => {
   if (!window.confirm("¿Restaurar el ejemplo? Se reemplazan todos los datos cargados. Si los necesitás, primero usá «Guardar datos».")) return;
+  clearProducts();
   writeState(defaults);
   logo.src = "assets/foto-de-producto.webp";
   logoInput.value = "";
