@@ -1,3 +1,7 @@
+// Versión visible en el pie de página. Actualizar en cada cambio publicado.
+const APP_VERSION = "2.1";
+const APP_UPDATED = "23/10/2026";
+
 const defaults = {
   labelTemplate: "",
   octagonMode: "provisorio",
@@ -844,6 +848,8 @@ document.querySelector("#resetBtn").addEventListener("click", () => {
   setMessage("");
   render();
 });
+
+document.querySelector("#appVersion").textContent = `Versión ${APP_VERSION} · actualizada el ${APP_UPDATED}`;
 
 stage.dataset.template = "panificacionOtros";
 writeState(defaults);

@@ -685,6 +685,19 @@ select:user-invalid {
   margin-left: auto;
 }
 
+.actionbar-info {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+}
+
+.app-version {
+  color: var(--muted);
+  font-size: 11px;
+  font-weight: 600;
+}
+
 .print-message {
   min-width: 0;
   font-size: 13px;
