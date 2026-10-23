@@ -759,8 +759,6 @@ dateFields.forEach((field) => {
 
 gipField.addEventListener("input", () => {
   validateGipField();
-  activatePanel("frontal");
-  setMessage("");
   render();
 });
 gipField.addEventListener("blur", validateGipField);
